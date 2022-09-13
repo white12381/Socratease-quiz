@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+#Navbar{
+  background-color: #04243c
+}
+ 
+#HeadingNav{
+  height: 50px;
+}
+#logo{
+  margin-left: 80px;
+}
+#Slider{
+  background-color:#04243c;
+  margin-top: 65px;
+  padding-top: 90px;
+}
+#pages{
+  padding-top: 65px;
+  margin-left: 500px;
+  text-align: center;
+}
+#sliderLinks{
+  padding-left: 130px
+}
+#NavRow1{
+  margin-top: -70px;
+}
+
+#NavRow2{
+  margin-top: -120px;
+}
+
+#NavRow3{
+  margin-top: -170px;
+}
+
+#NavRow4{
+  margin-top: -205px;
+}
+
+#NavRow5{
+  margin-top: -245px;
+}
+
+
+#NavRow6{
+  margin-top: -300px;
+}
+
+
+#NavRow7{
+  margin-top: -350px;
+}
+
+#offcanvasscrolling{
+  width: 40%;
+  
+}
+
+#offcanvaslogo{
+  width: 80%;
+}
+
+#offcanvas-header{  
+  background-color:#04243c;
+
+}
+#offcanvascancel{
+  background-color: white;
+}
+
+/* Lower Screen Size */
+@media screen and (max-width: 1025px) {
+#Slider{
+  display: none;
+}
+#logo{
+  margin-left: 10px;
+  width: 50%;
+  height: auto;
+  /* margin-top: -10px; */
+}
+#pages{
+  margin:auto;
+}
+}
+
+@media screen and (max-width: 1024px) {
+  #logo{
+    margin-left: 80px;
+    width: 50%;
+    height: auto;
+    margin-top: -40px;
+  }
+  
+}
