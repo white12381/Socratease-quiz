@@ -11,7 +11,7 @@ const SlideBar = () => {
 </div>
 <div className="col-12 row" id="NavRow1"> 
     <div className="col-6  text-end" id="sliderLinks"><FontAwesomeIcon icon={faBook} className="me-3" /> </div> 
-    <div className="col-6 text-start pe-5"> Recent tests</div> 
+    <div className="col-6 text-start pe-4"> Recent tests</div> 
 </div>
 <div className="col-12 row" id="NavRow2"> 
     <div className="col-3 text-end" id="sliderLinks">    <FontAwesomeIcon icon={faCircleArrowDown} className="me-3" /> </div>
@@ -27,7 +27,7 @@ const SlideBar = () => {
 </div>
 <div className="col-12 row" id="NavRow5">
     <div className="col-6  text-end" id="sliderLinks"> <FontAwesomeIcon icon={faBagShopping} className="me-3" /> </div>
-    <div className="col-6 text-start pe-3"> Purchase History</div>
+    <div className="col-6 text-start pe-2"> Purchase History</div>
 </div>
 <div className="col-12 row" id="NavRow6">
     <div className="col-6  text-end" id="sliderLinks"><FontAwesomeIcon icon={faUser} className="me-3" /> </div>

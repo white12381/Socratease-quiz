@@ -1,7 +1,7 @@
 import AutoProctorlogo from '../Images/AutoProctorlogo.png'
 const Headers = () => {
-    return <> 
-    <nav className="navbar navbar-expand-xl position-fixed" id="Navbar">
+    return <div className='fixed-top'> 
+    <nav className="navbar navbar-expand-xl" id="Navbar">
   <div className="ms-2 container-fluid row" id="HeadingNav">
     <div className="col-8">
     <button className="navbar-toggler bg-light text-light ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasscrolling" aria-controls="offcanvasScrolling" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ const Headers = () => {
     </div>
 
 </div>
-    </>
+    </div>
     
 }
 export default Headers;
