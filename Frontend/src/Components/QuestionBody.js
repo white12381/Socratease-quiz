@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-
+import QuestionContext from "../Context/QuestionContext"; 
  
 
 
 const QuestionBody = ({placeinside},{onchange}) => {
+
+  const Question = useContext(QuestionContext);
+
   var showtoolbar
   const [value, setValue] = useState('');
 
@@ -42,8 +45,19 @@ const HandleBlur = () => {
 
 
 
+  const HandleOnchange = (e) => {
+    if(e.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
+      Question.QuestionMethods.setQuestionBody(undefined)
+    }
+    else{
+      Question.QuestionMethods.setQuestionBody(e)
+    } 
+  }
+
+
+
   return <div> 
-  <ReactQuill   placeholder={placeinside} theme="snow" onBlur={HandleBlur}  value={value} onChange={setValue} modules={modules} onKeyUp={HandleKeyup}   formats={formats}/>
+  <ReactQuill   placeholder={placeinside} theme="snow" onBlur={HandleBlur}  value={Question.QuestionValues.QuestionBody} onChange={HandleOnchange} modules={modules} onKeyUp={HandleKeyup}   formats={formats}/>
   </div>
 }
  

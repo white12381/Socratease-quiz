@@ -5,6 +5,14 @@ const QuestionSchema = new Schema({
         type: String,
         required: true
     },
+    QuestionName: {
+        type: String,
+        required: true
+    },
+    QuestionPoint: {
+        type: Number,
+        required: true
+    },
     QuestionBody: {
         type:String,
         required: true,
@@ -49,13 +57,21 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         throw Error("Question Type Cannot be Empty")
     }
 
+        if(!body.QuestionName){
+            throw Error("Question Name is required");
+        }
 
+        if(!body.QuestionPoint){
+            throw Error("Question Point is required");
+        }
+    
         // Validate Question Body
         if(!body.QuestionBody){
             throw Error("Question Body is required")
         }
         const QuestionBody = await this.findOne({QuestionBody:body.QuestionBody});
-        if(QuestionBody){
+        const QuestionName = await this.findOne({QuestionName:body.QuestionName});
+        if(QuestionBody && QuestionName){
             throw Error("Question already exist in database");
         }        
        
@@ -63,7 +79,7 @@ QuestionSchema.statics.PostAQuestion = async function(body){
        if(body.QuestionAnswers === undefined){
         throw Error("Question Answer is required");
        }
-       if(body.QuestionAnswers.length >= body.QuestionAnswerOptions.length){
+       if(body.QuestionAnswers.length > body.QuestionAnswerOptions.length){
            throw Error("Question Answer should not be more than or equal to Question Answer Options");
        }
        if(body.QuestionAnswers.length < 1){
@@ -92,6 +108,15 @@ QuestionSchema.statics.PostMultipleQuestions = async function(body){
         if(!body[i].QuestionBody){
             throw Error("Question body cannot be empty")
         }
+
+        if(!body[i].QuestionName){
+            throw Error("Question Name is required");
+        }
+
+        if(!body[i].QuestionPoint){
+            throw Error("Question Point is required");
+        }
+
  const Question = await this.findOne({QuestionBody:body[i].QuestionBody});
  if(Question){
      throw Error("Question already exist in database");
@@ -116,7 +141,7 @@ QuestionSchema.statics.PostMultipleQuestions = async function(body){
        if(body[i].QuestionAnswers === undefined){
         throw Error("Question Answer is required");
        }
-       if(body[i].QuestionAnswers.length >= body[i].QuestionAnswerOptions.length){
+       if(body[i].QuestionAnswers.length > body[i].QuestionAnswerOptions.length){
            throw Error("Question Answer should not be more than or equal to Question Answer Options");
        }
        if(body[i].QuestionAnswers.length < 1){
@@ -148,20 +173,9 @@ return deletes;
 QuestionSchema.statics.UpdateAQuestion = async function(_id,body){
     const response = await this.findById(_id);
  
-          // Validate Question Type
-          if(body.QuestionType === undefined){
-            throw Error("Question Type Cannot be Empty")
-        }
-   
-            // Validate Question Body
-            if(!body.QuestionBody){
-                throw Error("Question Body is required")
-            }       
-           // Validate Question Answer Options
-           if(body.QuestionAnswers === undefined){
-            throw Error("Question Answer is required");
-           }
-           if(body.QuestionAnswers.length >= body.QuestionAnswerOptions.length){
+               
+            
+           if(body.QuestionAnswers.length > body.QuestionAnswerOptions.length){
                throw Error("Question Answer should not be more than or equal to Question Answer Options");
            }
            if(body.QuestionAnswers.length < 1){

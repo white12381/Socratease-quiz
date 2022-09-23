@@ -1,24 +1,32 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGripHorizontal } from "@fortawesome/free-solid-svg-icons"
+import QuestionContext from '../Context/QuestionContext';
 
 // Option 1
 const QuestionOption1 = ({placeinside},{onchange}) => {
     var showtoolbar
-    const [value, setValue] = useState('')
-  
+    const [value, setValue] = useState(null)
+    const Question = useContext(QuestionContext);
+
   
   
   const HandleKeyup = (e) => {
       showtoolbar = true
-      console.log(showtoolbar)
+ 
   }
   
   const HandleBlur = () => {
       showtoolbar = false;
-      console.log(showtoolbar);
+      if(Question.QuestionAnswerOption.option1 && !Question.QuestionValues.QuestionAnswerOptions.includes(Question.QuestionAnswerOption.option1)){
+      Question.setQuestionAnswerOption.setoption1(Question.QuestionAnswerOption.option1); 
+      }
+      else if (!Question.QuestionAnswerOption.option1){
+        Question.setQuestionAnswerOption.setoption1(undefined); 
+      }
+          
   }
   
   
@@ -39,27 +47,40 @@ const QuestionOption1 = ({placeinside},{onchange}) => {
       'list', 'bullet',
       'link','image','color','background'
     ]
-  
-  
-  
+
+    const HandleOnchange = (e) => {
+      if(e.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
+        Question.setQuestionAnswerOption.setoption1(undefined)
+      }
+      else{
+        Question.setQuestionAnswerOption.setoption1(e)
+      }     
+    }
+
+    
+    
+ 
+ 
     return <div> 
-    <ReactQuill id="option"  placeholder={placeinside} theme="snow" onBlur={HandleBlur}  value={value} onChange={setValue} modules={modules} onKeyUp={HandleKeyup}   formats={formats}/>
+     
+    <ReactQuill id="option"  placeholder={placeinside} theme="snow" onBlur={HandleBlur}   value={Question.QuestionAnswerOption.option1}   modules={modules} onFocus={HandleKeyup}  onChange={HandleOnchange}  formats={formats}/>
     </div>
   }
-
+ 
 
   const Option1 = () =>{
  
-     
+    const Question = useContext(QuestionContext); 
+    
     return <div className="row mt-4">
         <div className="col-lg-1 col-3 text-end">
         <FontAwesomeIcon icon={faGripHorizontal} className="me-1"/>
-        <input type="radio" className="border  me-2" onClick={(e) => {
-          if(e.target.checked === true){
-            console.log("true");
+        <input type="radio"  className="border  me-2" value={Question.QuestionValues.QuestionAnswerOptions[0]} onChange={(e) => {
+          if(e.target.checked === true){ 
+            Question.QuestionMethods.setQuestionAnswers([Question.QuestionValues.QuestionAnswerOptions[0]]);
           }
-          else if(e.target.checked === true){
-            console.log("false");
+          else{
+            console.log("option 1 not checked");
           }
         } } name="option" />
         </div>
