@@ -66,7 +66,7 @@ const QuestionOption1 = ({placeinside},{onchange}) => {
 
   const Option3 = () =>{
  const Question = useContext(QuestionContext);
-    return <div className="row mt-4">
+    return <div className={(Question.QuestionValues.QuestionType === "MCA") ? "row mt-4": "d-none"}>
     <div className="col-lg-1 col-3 text-end">
     <FontAwesomeIcon icon={faGripHorizontal} className="me-1"/>
     <input type="radio" className="border  me-2" onChange={(e) => {

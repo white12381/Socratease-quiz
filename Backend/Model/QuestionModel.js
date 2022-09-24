@@ -79,9 +79,7 @@ QuestionSchema.statics.PostAQuestion = async function(body){
        if(body.QuestionAnswers === undefined){
         throw Error("Question Answer is required");
        }
-       if(body.QuestionAnswers.length > body.QuestionAnswerOptions.length){
-           throw Error("Question Answer should not be more than or equal to Question Answer Options");
-       }
+        
        if(body.QuestionAnswers.length < 1){
         throw Error("Question Answer is Required");
        }
@@ -140,9 +138,6 @@ QuestionSchema.statics.PostMultipleQuestions = async function(body){
        // Validate Question Answer Options
        if(body[i].QuestionAnswers === undefined){
         throw Error("Question Answer is required");
-       }
-       if(body[i].QuestionAnswers.length > body[i].QuestionAnswerOptions.length){
-           throw Error("Question Answer should not be more than or equal to Question Answer Options");
        }
        if(body[i].QuestionAnswers.length < 1){
         throw Error("Question Answer is Required");
