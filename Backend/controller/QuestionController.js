@@ -10,6 +10,29 @@ res.status(200).json(response);
 }
 }
 
+// Get a Question By Id
+const GetAQuestionById = async (req,res) => {
+    const id = req.params.id;
+    try{
+        const response = await QuestionModel.FindAQuestionById(id);
+        res.status(200).json(response);
+        }catch(err){
+            res.status(400).json({error: err.message});
+        }
+}
+
+// Get Questions by Name
+const GetAQuestionByName = async (req,res) => {
+    const name = decodeURI(req.params.name);
+
+    try{
+        const response = await QuestionModel.FindAQuestionByName(name);
+        res.status(200).json(response);
+        }catch(err){
+            res.status(400).json({error: err.message});
+        }
+}
+
 // Post a Question
 const PostAQuestion = async (req,res) => {
     const body = req.body;
@@ -56,4 +79,4 @@ res.status(200).json(response);
 }
 
 
-module.exports = {GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion}
+module.exports = {GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion}

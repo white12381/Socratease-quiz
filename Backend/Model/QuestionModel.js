@@ -1,5 +1,6 @@
 const {Schema} = require("mongoose");
 const mongoose = require("mongoose");
+var ObjectId = require('mongoose').Types.ObjectId;
 const QuestionSchema = new Schema({
     QuestionType: {
         type: String,
@@ -46,6 +47,27 @@ if(Questions.length <= 0){
 }
 console.log(Questions);
 return Questions;
+}
+
+// Find Question By Id
+QuestionSchema.statics.FindAQuestionById = async function(_id){
+if(!ObjectId.isValid(_id)){
+    throw Error("Invalid Id")
+}
+const Question = await this.findById(_id);
+if(!Question){
+    throw Error("Id does not Exist");
+}
+return Question;
+}
+
+// Find Question By name
+QuestionSchema.statics.FindAQuestionByName = async function(name){
+const Questions = await this.find({QuestionName: name});
+if(Questions.length < 1){
+    throw Error("Question Name does not Exist");
+}
+return Questions
 }
 
 // Post  AQuestion
