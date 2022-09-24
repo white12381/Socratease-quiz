@@ -15,13 +15,11 @@ const QuestionBody = ({placeinside},{onchange}) => {
 
 
 const HandleKeyup = (e) => {
-    showtoolbar = true
-    console.log(showtoolbar)
+    showtoolbar = true 
 }
 
 const HandleBlur = () => {
-    showtoolbar = false;
-    console.log(showtoolbar);
+    showtoolbar = false; 
 }
 
 

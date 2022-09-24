@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import { useContext } from "react";
-import QuestionContext from "../Context/QuestionContext";
-
+import QuestionContext from "../Context/QuestionContext"; 
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 
 const Question = () => {
 const Question = useContext(QuestionContext)
@@ -19,15 +19,22 @@ if(Question.QuestionValues.QuestionType && Question.QuestionValues.QuestionPoint
     Question.QuestionMethods.setQuestionAnswers([]);
 }
 else {
-    
+    const toastId = 1;
+    toast.error("All feilds are required",{
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        toastId: toastId,
+        hideProgressBar: true
+    });
 }  
 }
 
 const SaveBtn = async () => { 
-    
+    const toastId = 2;
     const temp = [...QuestionAdd];
     if(QuestionAdd.length > 0){
         for(let i = 0; i < QuestionAdd.length; i++){
+            QuestionAdd[i].QuestionName = Question.QuestionValues. QuestionName;
    const response = await fetch('http://127.0.0.1:4000/api/question',{
             method: 'POST', 
             body: JSON.stringify(QuestionAdd[i]),
@@ -36,20 +43,40 @@ const SaveBtn = async () => {
 
 
 const data = await response.json();
-
-console.log(response)
+ 
 if(!response.ok){
-    console.log(data.error);
+    const err = data.error;
+    const toastId = 3;
+    toast.error(err ,{
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        toastId: toastId,
+        hideProgressBar: true
+    });
 }
 else{
-    temp.splice(i,1);
+    toast.success("Question Created Successfuly",{
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        toastId: toastId,
+        hideProgressBar: true
+    })
 }
+Question.setAddQuestion([]);
 
     }
-    
-Question.setAddQuestion([...temp]);
-console.log(QuestionAdd)
+     
 }
+
+else {
+    toast.error("Please enter a Question for Question one",{
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        toastId: toastId,
+        hideProgressBar: true
+    });
+}
+ 
 
 }
 

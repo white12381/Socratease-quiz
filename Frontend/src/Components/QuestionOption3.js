@@ -13,8 +13,7 @@ const QuestionOption1 = ({placeinside},{onchange}) => {
   
   
   const HandleKeyup = (e) => {
-      showtoolbar = true
-      console.log(showtoolbar)
+      showtoolbar = true 
   }
 
 

@@ -8,7 +8,7 @@ const [QuestionType, SetQuestionType] = useState("MCA");
 const [QuestionPoint, setQuestionPoint] = useState('');
 const [QuestionBody,setQuestionBody] = useState(undefined);
 const [QuestionAnswers, setQuestionAnswers] = useState([]);
-const [QuestionName, setQuestionName] = useState("Maths");
+const [QuestionName, setQuestionName] = useState('');
 // var QuestionAdd = []; 
 const [option1, setoption1] = useState(undefined);
 const [option2,setoption2] = useState(undefined);
@@ -48,7 +48,7 @@ const QuestionValues = {
     QuestionName
 }
 const QuestionMethods = {
-    setQuestionType,setQuestionPoint, setQuestionBody, setQuestionAnswers
+    setQuestionType,setQuestionPoint, setQuestionBody, setQuestionAnswers,setQuestionName
 }
 
 var setQuestionAnswerOption = {

@@ -1,11 +1,13 @@
 import Navbar from "./Components/navbar";
 import SlideBar from "./Components/SideBar";
 import AdminSocratease from "./Pages/AdminSocrateaseQuiz";
-import { QuestionProvider } from "./Context/QuestionContext";
+import { QuestionProvider } from "./Context/QuestionContext"; 
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
-    <QuestionProvider>
+    <QuestionProvider> 
               <Navbar/>
        <div className="container row">
 <div className="col-xl-3 text-center row  align-items-center  position-fixed text-light" id="Slider" style={{"minHeight": "100vh"}}>

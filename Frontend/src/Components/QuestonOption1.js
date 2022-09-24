@@ -89,4 +89,4 @@ const QuestionOption1 = ({placeinside},{onchange}) => {
         </div>
         </div>
     }
- export default Option1;
+ export default Option1;  

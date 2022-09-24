@@ -2,19 +2,10 @@ import React,{useContext,useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGripHorizontal, faTrashCan, faCircleStop } from "@fortawesome/free-solid-svg-icons";
 import QuestionContext from "../Context/QuestionContext"; 
+import DeleteQuestion from "./deleteQuestion";
 
 const QuestionAdd = ({questions}) => {
-    const Questions = useContext(QuestionContext);
-    const [removemodal, setRemovemodal] = useState(false);
-    const removeQuestion = (index) => {
-        const temp = [...Questions.addQuestion];
-        temp.splice(index,1);
-        Questions.setAddQuestion([...temp]); 
-        setRemovemodal(true)
-        console.log(Questions.addQuestion)
-        const modal = document.getElementById('exampleModal');
-        modal.dispose();
-    }
+    const Questions = useContext(QuestionContext); 
     return <>
     {           
         (questions.length > 0) && questions.map( (question, index) => (
@@ -61,26 +52,10 @@ const QuestionAdd = ({questions}) => {
 
             </div>
              <div className="col-2 d-flex align-items-center ps-3">
-             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-             <FontAwesomeIcon icon={faTrashCan} />
-             </button>
+             <DeleteQuestion index = {index} />
              </div>
 
-              
- <div className={"modal fade"} id="exampleModal"  data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered">
-    <div className="modal-content"> 
-      <div className="modal-body">
-      <FontAwesomeIcon icon={faCircleStop} className="text-danger me-2" />
-      Are you sure you want to  permanently delete this Question ?
-        <div className="float-end mt-3" >
-        <button className="btn btn-light me-2 border text-dark" data-bs-dismiss="modal">No</button>
-        <button className="btn btn-danger text-light" data-bs-dismiss={removemodal ? "modal" : "none"} onClick={(index) => removeQuestion(index)} >Yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+       
 
 
             </div>

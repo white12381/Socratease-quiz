@@ -7,9 +7,10 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Question from "../Hooks/QuestionHooks";
 import QuestionAdd from "../Components/QuestonAdded";
 import QuestionContext from "../Context/QuestionContext";
+import SaveQuestion from "../Components/SaveQuestion";
     
  const AdminSocratease = () => {
-    const {AddBtn, SaveBtn} = Question();
+    const {AddBtn} = Question();
     const Questions = useContext(QuestionContext);
     
     return<div> 
@@ -23,9 +24,7 @@ import QuestionContext from "../Context/QuestionContext";
     </button>
 </div>
 <div className="col-lg-4 col-6 text-start">
-<button className="btn fs-6" id="saveQuestion" onClick={SaveBtn}> 
-<FontAwesomeIcon icon={faCloudUpload} className="me-2" />
-Save Question</button>
+<SaveQuestion/>
 </div>
 </div>
     </div>
