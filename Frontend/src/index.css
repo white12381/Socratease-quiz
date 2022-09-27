@@ -76,6 +76,10 @@ padding: 5px;
   width: 80%;
 }
 
+#QuestionPage{
+  background-color: whitesmoke
+}
+
 #offcanvas-header{  
   background-color:#04243c;
 

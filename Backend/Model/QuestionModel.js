@@ -62,12 +62,18 @@ return Question;
 }
 
 // Find Question By name
-QuestionSchema.statics.FindAQuestionByName = async function(name){
-const Questions = await this.find({QuestionName: name});
+QuestionSchema.statics.FindAQuestionByName = async function(name,index){
+let TotalPoint = 0;
+const Questions = await this.find({QuestionName: name}).limit(1).skip(index);
+const QuestionLength = await this.find({QuestionName: name}).count()
+const Question = await this.find({QuestionName: name});
+for(let i = 0; i < Question.length; i++){
+    TotalPoint += Question[i].QuestionPoint;
+}
 if(Questions.length < 1){
     throw Error("Question Name does not Exist");
 }
-return Questions
+return {Questions,QuestionLength,TotalPoint}
 }
 
 // Post  AQuestion

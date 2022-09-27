@@ -11,8 +11,7 @@ const AddBtn = () => {
      
 if(Question.QuestionValues.QuestionType && Question.QuestionValues.QuestionPoint && Question.QuestionValues.QuestionBody
  && (Question.QuestionValues.QuestionAnswers.length > 0) ){
-    Question.AddQuestion(Question.QuestionValues);   
-    // Question.QuestionMethods.setQuestionType("MCA"); 
+    Question.AddQuestion(Question.QuestionValues);    
     Question.QuestionMethods.setQuestionBody(undefined);
     Question.setQuestionAnswerOption.setoption1(undefined); Question.setQuestionAnswerOption.setoption2(undefined)
     Question.setQuestionAnswerOption.setoption3(undefined); Question.setQuestionAnswerOption.setoption4(undefined)

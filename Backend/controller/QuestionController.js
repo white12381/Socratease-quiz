@@ -24,9 +24,9 @@ const GetAQuestionById = async (req,res) => {
 // Get Questions by Name
 const GetAQuestionByName = async (req,res) => {
     const name = decodeURI(req.params.name);
-
+const index = req.query.index || 0;
     try{
-        const response = await QuestionModel.FindAQuestionByName(name);
+        const response = await QuestionModel.FindAQuestionByName(name,index);
         res.status(200).json(response);
         }catch(err){
             res.status(400).json({error: err.message});
