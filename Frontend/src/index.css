@@ -57,11 +57,38 @@ padding: 5px;
   margin-top: -245px;
 }
 
+#homePage{
+  background-color:  #5dbd84;
+  padding-top: 90px;
+}
 
+#HomeOffcanvasBody{
+  margin-top: 100px;
+}
+
+#HomeOffcanvas{
+  width: 90%;
+}
+#taketest{
+  width:30%;
+  margin-top: 40px;
+  background-color:#04243c;
+  color: white; 
+}
 #NavRow6{
   margin-top: -300px;
 }
 
+#innerLogo{
+  margin-left: 100px;
+}
+
+#innerHeading{
+  background-color: #5dbd84;
+   width: 106%;
+margin-left: -12px;
+
+}
 
 #NavRow7{
   margin-top: -350px;
@@ -76,13 +103,19 @@ padding: 5px;
   width: 80%;
 }
 
+#homepagelogo{
+  margin-right: 140px;
+}
+
 #QuestionPage{
   background-color: whitesmoke
 }
 
 #offcanvas-header{  
   background-color:#04243c;
-
+}
+#signIn{
+  background-color: #5dbd84;
 }
 #offcanvascancel{
   background-color: white;
@@ -99,6 +132,10 @@ padding: 5px;
   height: auto;
   /* margin-top: -10px; */
 }
+#taketest{
+  width:70%
+}
+
 #pages{
   margin:auto;
 }
@@ -123,6 +160,13 @@ padding: 5px;
     width: 50%;
     height: auto;
     margin-top: -40px;
+  }
+
+  #logoHome{
+    margin-right: 110px;
+    width: 50%;
+    height: auto;
+    margin-top: -40px;  
   }
   #pages{
  width: 100%;
