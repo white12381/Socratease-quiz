@@ -2,6 +2,10 @@ const {Schema} = require("mongoose");
 const mongoose = require("mongoose");
 var ObjectId = require('mongoose').Types.ObjectId;
 const QuestionSchema = new Schema({
+    AdminEmail: {
+        type: String,
+        required: true
+    },
     QuestionType: {
         type: String,
         required: true
@@ -99,7 +103,8 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         }
         const QuestionBody = await this.findOne({QuestionBody:body.QuestionBody});
         const QuestionName = await this.findOne({QuestionName:body.QuestionName});
-        if(QuestionBody && QuestionName){
+        const UserEmail = await this.findOne({AdminEmail:body.AdminEmail});
+        if(QuestionBody && QuestionName && UserEmail){
             throw Error("Question already exist in database");
         }        
        
@@ -144,7 +149,9 @@ QuestionSchema.statics.PostMultipleQuestions = async function(body){
         }
 
  const Question = await this.findOne({QuestionBody:body[i].QuestionBody});
- if(Question){
+ const UserEmail = await this.findOne({AdminEmail:body[i].AdminEmail});
+ const QuestionName = await this.findOne({QuestionName:body[i].QuestionName});
+ if(Question && UserEmail && QuestionName){
      throw Error("Question already exist in database");
  }
 

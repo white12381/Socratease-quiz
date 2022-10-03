@@ -1,5 +1,11 @@
 import AutoProctorlogo from '../Images/AutoProctorlogo.png'
+import GoogleLoginAuth from '../../Components/GoogleLoginAuth';
 const Headers = () => {
+  const {signout} = GoogleLoginAuth();
+
+  const HandleSignOut =  async () => {
+    await signout(); 
+  }
     return <div className='fixed-top'> 
     <nav className="navbar navbar-expand-xl" id="Navbar">
   <div className="ms-2 container-fluid row" id="HeadingNav">
@@ -24,6 +30,9 @@ const Headers = () => {
         </li>
         <li className="nav-item">
           <a className="nav-link disabled text-white">Hi Teacher</a>
+        </li>
+        <li className="nav-item" onClick={HandleSignOut}>
+          <a className="nav-link disabled text-white">Sign Out</a>
         </li>
       </ul>
     </div>
@@ -85,8 +94,9 @@ const Headers = () => {
         </li>
         <hr/>
       </ul>
-
-      <a className="nav-link disabled text-secondary fw-bolder ms-5 mt-3 fs-5  mb-5"> Logout</a>
+        <ol onClick={HandleSignOut}>
+      <a  className="nav-link disabled text-secondary fw-bolder ms-5 mt-3 fs-5  mb-5"> Logout</a>
+    </ol>
     </div>
 
 </div>

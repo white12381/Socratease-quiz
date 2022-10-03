@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGzQnv3hq7wLaJuIywThq_f8MNbRDXzE4",
@@ -14,26 +15,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig); 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-const signIn = async () =>{
-signInWithPopup(auth, provider)
-  .then((result) => {
-     const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    const name = result.user.displayName;
-    const email = result.user.email;
-    localStorage.setItem('name',name);
-    localStorage.setItem('email',email);
-    // console.log(name, email);
-  }).catch((error) => { 
-    const errorCode = error.code;
-    const errorMessage = error.message; 
-    const email = error.customData.email; 
-    const credential = GoogleAuthProvider.credentialFromError(error);
-  });
-}
-const GoogleLoginAuth = () => {
 
-  return signIn
+
+
+const GoogleLoginAuth = () => {
+  const navigate = useNavigate();
+  const signIn = async () =>{
+    signInWithPopup(auth, provider)
+      .then((result) => { 
+        const name = result.user.displayName;
+        const email = result.user.email;
+        localStorage.setItem('name',name);
+        localStorage.setItem('email',email); 
+        navigate("/");
+      
+      }).catch((error) => { 
+        const errorCode = error.code;
+        const errorMessage = error.message; 
+        const email = error.customData.email; 
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+    }
+
+    const signout = async () => {
+      signOut(auth).then(() => {
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");  
+        navigate("/");  
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+    
+  return {signIn, signout}
 }
 
 export default GoogleLoginAuth;

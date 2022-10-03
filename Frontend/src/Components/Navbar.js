@@ -4,23 +4,51 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import AutoProctorlogo from '../Images/AutoProctorlogo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCreditCard, faQuestionCircle, faSignIn, faHandsHelping } from '@fortawesome/free-solid-svg-icons';
-
+import { faBookOpen, faCreditCard,faSignOut, faQuestionCircle, faSignIn, faHandsHelping } from '@fortawesome/free-solid-svg-icons';
+import GoogleLoginAuth from './GoogleLoginAuth';
+import {useState, useEffect} from 'react'
 function NavBar() {
+  const {signIn, signout} = GoogleLoginAuth();
+  const [name, setName] = useState(undefined);
+  const [email, setEmail] = useState(undefined);
+
+  useEffect( () => {
+setName(localStorage.getItem("name"));
+setEmail(localStorage.getItem("email"));
+if(!localStorage.getItem("name")){
+  setName(undefined)
+}
+if(!localStorage.getItem("email")){
+  setEmail(undefined)
+}
+console.log(name,email);
+  })
+
+  const HandleSignIn = async () => {
+    await signIn();
+  }
+
+  const HandleSignOut = async () => {
+    await signout();
+  }
+
   return (
     <div>
     <Navbar  collapseOnSelect expand="md" className="d-none d-lg-block" id="offcanvas-header" variant="dark">
       <Container className="row">
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Brand href="#home" className="col-6" id="homepagelogo">  
+        <Navbar.Brand  className="col-4" id="homepagelogo">  
          <img src={AutoProctorlogo} alt="Logo" id="logo" width="30%" height="auto" className="d-inline-block align-text-md-bottom align-text-middle"/>
            </Navbar.Brand>
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="col-6 me-5 justify-content-center">
-            <Nav.Link href="#features" className='text-light fs-4 me-4'>Pricing</Nav.Link>
-            <Nav.Link href="#pricing" className='text-light me-4 fs-4'>FAQs</Nav.Link>
-            <Nav.Link href="#pricing" className='text-light me-4 fs-4'>Help</Nav.Link>
-            <Nav.Link href="#pricing" className='text-light fs-4 me-4  rounded-pill border border-light border-2 text-outline-danger' id="signIn">SIGN IN ></Nav.Link>
+          <Nav className="col-8 me-5 justify-content-center">
+            <Nav.Link   className='text-light fs-4 me-4'>Pricing</Nav.Link>
+            <Nav.Link   className='text-light me-4 fs-4'>FAQs</Nav.Link>
+            <Nav.Link   className='text-light me-4 fs-4'>Help</Nav.Link>
+           {(name && email) &&(<Nav.Link  className='text-light me-4 fs-4'> Hi {name.split(" ")[0]}</Nav.Link>) }
+           {(name && email) &&(<Nav.Link  className='text-light me-4 fs-4' onClick={HandleSignOut} > Sign Out</Nav.Link>) }
+          {!(name && email) && (
+             <Nav.Link  onClick={HandleSignIn} className='text-light fs-4 me-4  rounded-pill border border-light border-2 text-outline-danger' id="signIn">SIGN IN ></Nav.Link> )} 
           </Nav> 
         </Navbar.Collapse>
       </Container>
@@ -45,8 +73,14 @@ function NavBar() {
 <FontAwesomeIcon icon={faQuestionCircle} />  FAQs</h1>
 <h1 className='mt-5 text-primary  bolder'>
 <FontAwesomeIcon icon={faHandsHelping}/> Support</h1>
-<a> <h1 className='mt-5 text-primary  bolder'>
+{!(name && email) && (
+<a> <h1 className='mt-5 text-primary  bolder' onClick={HandleSignIn}>
 <FontAwesomeIcon icon={faSignIn}/> Login </h1></a>
+)}
+{(name && email) && (
+<a> <h1 className='mt-5 text-primary  bolder' onClick={HandleSignOut}>
+<FontAwesomeIcon icon={faSignOut}/> Logout </h1></a>
+)}
   </div>
   </div>
 

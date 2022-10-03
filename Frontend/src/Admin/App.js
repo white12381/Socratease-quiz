@@ -5,8 +5,9 @@ import { QuestionProvider } from "./Context/QuestionContext";
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import QuestionPage from "./Pages/QuestionPage";
-
+import { Navigate } from 'react-router-dom';
 function AppAdmin() {
+  const authorized = ((localStorage.getItem("name") && localStorage.getItem("email")) != null);
   return (
     <QuestionProvider> 
               <Navbar/>
@@ -17,8 +18,8 @@ function AppAdmin() {
         <div className="col-xl-9" id="pages">
            
           <Routes>
-        <Route path="/addQuestions" element={<AdminSocratease/>} />  
-        <Route path="/Question" element={<QuestionPage/>} />        
+        <Route path="/addQuestions" element={authorized ? <AdminSocratease/> :<Navigate to="/" />} />  
+        <Route path="/Question" element={authorized ? <QuestionPage/> :<Navigate to="/" />} />        
         </Routes> 
         </div>
 

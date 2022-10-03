@@ -4,6 +4,8 @@
  import AutoProctorlogo from  "../Images/AutoProctorlogo.png"
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+ import { Link } from "react-router-dom";
+
 function HomePage() {
   return (<div>
   <NavBar/>
@@ -13,7 +15,10 @@ function HomePage() {
   </h1>
   <h5 className="fw-light text-center mt-5"> No more Cheating on Online Tests</h5>
 <button id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder btn-lg">Take Demo Test > </button>
-<button id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"> Create Test > </button>
+<Link id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"
+ to="/Admin/addQuestions">
+Create Test >
+</Link>
 <div className="row justify-content-evenly mt-5">
   <div className="col-12 col-md-4 text-md-start">
 <img src={students2}/>
@@ -28,7 +33,7 @@ function HomePage() {
   <ol> <FontAwesomeIcon icon={faCircleCheck} style={{ color : "#5dbd84"}} className="me-2" /> Click on Create Test</ol>
   <ol> <FontAwesomeIcon icon={faCircleCheck} style={{ color : "#5dbd84"}} className="me-2" /> Click on Save Test to Submit </ol>
   <ol> <FontAwesomeIcon icon={faCircleCheck} style={{ color : "#5dbd84"}} className="me-2" /> Enter Test Name</ol>
-  <ol> <FontAwesomeIcon icon={faCircleCheck} style={{ color : "#5dbd84"}} className="me-2" /> Share Link Test to Student to take the Test</ol>
+  <ol> <FontAwesomeIcon icon={faCircleCheck} style={{ color : "#5dbd84"}} className="me-2" /> Share Test Link to Student to take the Test</ol>
 </ul>
   </div>
 <div className="col-12 col-md-3  mt-5">

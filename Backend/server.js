@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const questionRoutes = require("./Routes/QuestionRoutes");
+const StudentRoutes = require("./Routes/StudentRoutes")
 const cors = require("cors");
 require("dotenv").config();
 
@@ -20,6 +21,7 @@ app.get('/',(req,res) => {
 });
 
 app.use("/api", questionRoutes);
+app.use("/students", StudentRoutes);
 
 app.use( (req,res) => {
     res.status(404).json({error: "404 not found"})
