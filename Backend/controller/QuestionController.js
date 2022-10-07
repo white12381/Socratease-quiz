@@ -23,10 +23,12 @@ const GetAQuestionById = async (req,res) => {
 
 // Get Questions by Name
 const GetAQuestionByName = async (req,res) => {
-    const name = decodeURI(req.params.name);
+    const name = decodeURI(req.params.name).toString();
+    const path = req.params.path.toString();
+
 const index = req.query.index || 0;
     try{
-        const response = await QuestionModel.FindAQuestionByName(name,index);
+        const response = await QuestionModel.FindAQuestionByName(path,name,index);
         res.status(200).json(response);
         }catch(err){
             res.status(400).json({error: err.message});

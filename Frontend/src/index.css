@@ -83,6 +83,12 @@ padding: 5px;
   margin-left: 100px;
 }
 
+#BacktoHome{
+  text-align: center; 
+  margin-left:   48%;
+  background-color:#04243c;
+}
+
 #innerHeading{
   background-color: #5dbd84;
    width: 106%;

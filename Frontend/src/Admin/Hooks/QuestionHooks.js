@@ -33,7 +33,7 @@ const SaveBtn = async () => {
     const temp = [...QuestionAdd];
     if(QuestionAdd.length > 0){
         for(let i = 0; i < QuestionAdd.length; i++){
-            QuestionAdd[i].QuestionName = Question.QuestionValues. QuestionName;
+            QuestionAdd[i].QuestionName = Question.QuestionValues.QuestionName;
    const response = await fetch('http://127.0.0.1:4000/api/question',{
             method: 'POST', 
             body: JSON.stringify(QuestionAdd[i]),

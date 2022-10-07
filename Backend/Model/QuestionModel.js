@@ -2,7 +2,7 @@ const {Schema} = require("mongoose");
 const mongoose = require("mongoose");
 var ObjectId = require('mongoose').Types.ObjectId;
 const QuestionSchema = new Schema({
-    AdminEmail: {
+    Path: {
         type: String,
         required: true
     },
@@ -40,7 +40,7 @@ const QuestionSchema = new Schema({
               }
         }
     }
-},{timestamps: true});
+}, {timestamps: true});
 
 
 // Find all Questions
@@ -66,9 +66,9 @@ return Question;
 }
 
 // Find Question By name
-QuestionSchema.statics.FindAQuestionByName = async function(name,index){
+QuestionSchema.statics.FindAQuestionByName = async function(path,name,index){
 let TotalPoint = 0;
-const Questions = await this.find({QuestionName: name}).limit(1).skip(index);
+const Questions = await this.find({QuestionName: name, Path: path}).limit(1).skip(index);
 const QuestionLength = await this.find({QuestionName: name}).count()
 const Question = await this.find({QuestionName: name});
 for(let i = 0; i < Question.length; i++){
@@ -100,11 +100,9 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         // Validate Question Body
         if(!body.QuestionBody){
             throw Error("Question Body is required")
-        }
-        const QuestionBody = await this.findOne({QuestionBody:body.QuestionBody});
-        const QuestionName = await this.findOne({QuestionName:body.QuestionName});
-        const UserEmail = await this.findOne({AdminEmail:body.AdminEmail});
-        if(QuestionBody && QuestionName && UserEmail){
+        } 
+        const User = await this.findOne({Path:body.Path, QuestionName:body.QuestionName,QuestionBody:body.QuestionBody});
+        if(User){
             throw Error("Question already exist in database");
         }        
        
@@ -148,12 +146,10 @@ QuestionSchema.statics.PostMultipleQuestions = async function(body){
             throw Error("Question Point is required");
         }
 
- const Question = await this.findOne({QuestionBody:body[i].QuestionBody});
- const UserEmail = await this.findOne({AdminEmail:body[i].AdminEmail});
- const QuestionName = await this.findOne({QuestionName:body[i].QuestionName});
- if(Question && UserEmail && QuestionName){
-     throw Error("Question already exist in database");
- }
+        const User = await this.findOne({Path:body[i].Path, QuestionName:body[i].QuestionName,QuestionBody:body[i].QuestionBody});
+        if(User){
+            throw Error("Question already exist in database");
+        } 
 
       // Validate Question Type
       if(body[i].QuestionType === undefined){

@@ -39,6 +39,22 @@ try{
 }
 
 
+// Get Questions by Name
+const GetAQuestionByPathAndName = async (req,res) => {
+    const path = decodeURI(req.params.path).toString();
+    const name = req.params.name.toString();
+
+const index = req.query.index || 0;
+    try{
+        const response = await StudentModel.GetAQuestionByPathAndName(path,name,index);
+        res.status(200).json(response);
+        }catch(err){
+            res.status(400).json({error: err.message});
+        }
+}
+
+
+
 const DeleteQuestionByEmail = async (req,res) => {
     const email = req.params.email;
 try{
@@ -60,4 +76,4 @@ try{
 }
 }
 
-module.exports = {GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}
+module.exports = {GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}

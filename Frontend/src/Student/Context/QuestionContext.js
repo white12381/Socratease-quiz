@@ -3,35 +3,55 @@ import React, { useState } from "react";
 const QuestionContext = React.createContext();
 
 export const QuestionProvider = ({children}) => {
-    const [questionName, setQuestionName] = useState(undefined);
+    const [QuestionType, setQuestionType] = useState(undefined);
+    const [QuestionName, setQuestionName] = useState(undefined);
     const [questionLength, setQuestionLength] = useState(undefined);
-    const [questionBody, setQuestionBody] = useState(undefined);
-    const [questionAnswerOptions, setQuestionAnswerOptions] = useState([]);
-    const [questionAnswer, setQuestionAnswer] = useState([]);
+    const [QuestionBody, setQuestionBody] = useState(undefined); 
+    const [QuestionPath, setQuestionPath] = useState(undefined);
+    const [QuestionAnswerOptions, setQuestionAnswerOptions] = useState([]);
+    const [QuestionAnswers, setQuestionAnswers] = useState([]);
     const [serialNumber, setSerialNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(1)
-    const [selectedAnswer, setSelectedAnswer] = useState(undefined)
-    const [questionPoint, setQuestionPoint] = useState(undefined) 
-    const [score, setScore] = useState(0)
+    const [QuestionSelectedAnswer, setQuestionSelectedAnswer] = useState([])
+    const [QuestionPoint, setQuestionPoint] = useState(undefined) 
+    const [FullName, setFullName] = useState(localStorage.getItem("name"));
+    const [Email, setEmail] = useState(localStorage.getItem("email"));
+    const [TotalPoint, setTotalPoint] = useState(undefined);
+    const [score, setScore] = useState(0) 
      
 
         const setAnswerOptions = (value) => {
             setQuestionAnswerOptions([...value])   
         }
 
-        const setAnswers = (value) => {
-            setQuestionAnswer([...value])   
+        const setSelectedAnswer = (value) => {
+            setQuestionSelectedAnswer([...value])
         }
 
-    const QuestionValues = {
-   score,questionAnswer,  questionPoint,selectedAnswer,questionName, questionLength, questionBody, questionAnswerOptions,serialNumber,questionNumber
-    }
+        const setAnswers = (value) => {
+            setQuestionAnswers([...value])   
+        }
+
+        const Student = { FullName,Email, TotalPoint}
+
+        const Question = {
+            QuestionType, QuestionName,QuestionPoint,QuestionBody,
+            QuestionPath, QuestionAnswerOptions,QuestionAnswers
+        }
+        
+        const body = {Question,Student,QuestionSelectedAnswer};
+
+
 
     const QuestionMethods = {
-        setScore,setAnswers,  setQuestionPoint,setSelectedAnswer,setQuestionNumber,setQuestionName, setQuestionLength, setQuestionBody,setAnswerOptions,setSerialNumber
+        setFullName,  setEmail,setTotalPoint,setQuestionType,setQuestionName,
+         setQuestionLength, setQuestionBody,setAnswerOptions,setSerialNumber,
+        setQuestionPath, setAnswers, setSelectedAnswer,setQuestionNumber,setQuestionPoint
     }
 
-    return <QuestionContext.Provider value={{QuestionValues, QuestionMethods}}>
+    
+
+    return <QuestionContext.Provider value={{body,questionLength,QuestionSelectedAnswer, QuestionMethods, Student, Question,serialNumber, questionNumber,}}>
     {children}
     </QuestionContext.Provider>
 }

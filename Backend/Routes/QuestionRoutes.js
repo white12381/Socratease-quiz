@@ -8,7 +8,7 @@ questionRoutes.get('/questions',GetallQuestions);
 questionRoutes.get('/question/:id',GetAQuestionById);
 
 // Get Question By Name
-questionRoutes.get('/question/name/:name',GetAQuestionByName)
+questionRoutes.get('/question/:path/name/:name',GetAQuestionByName)
 
 // Post a question
 questionRoutes.post('/question',PostAQuestion);

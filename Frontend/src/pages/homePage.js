@@ -14,7 +14,7 @@ function HomePage() {
     Fully Automated Exam Proctoring
   </h1>
   <h5 className="fw-light text-center mt-5"> No more Cheating on Online Tests</h5>
-<button id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder btn-lg">Take Demo Test > </button>
+<Link to="student/Question/olasunkanmiusman1111/Demo" id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder btn-lg">Take Demo Test > </Link>
 <Link id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"
  to="/Admin/addQuestions">
 Create Test >

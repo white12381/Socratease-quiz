@@ -9,6 +9,7 @@ const [QuestionPoint, setQuestionPoint] = useState('');
 const [QuestionBody,setQuestionBody] = useState(undefined);
 const [QuestionAnswers, setQuestionAnswers] = useState([]);
 const [QuestionName, setQuestionName] = useState('');
+const [Path, setPath] = useState(localStorage.getItem("email").split("@")[0]);
 // var QuestionAdd = []; 
 const [option1, setoption1] = useState(undefined);
 const [option2,setoption2] = useState(undefined);
@@ -45,7 +46,7 @@ const setQuestionType = (value) => {
 
 const QuestionValues = {
  QuestionType, QuestionPoint, QuestionBody, QuestionAnswerOptions, QuestionAnswers,
-    QuestionName
+    QuestionName,Path
 }
 const QuestionMethods = {
     setQuestionType,setQuestionPoint, setQuestionBody, setQuestionAnswers,setQuestionName
