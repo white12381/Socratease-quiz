@@ -10,6 +10,9 @@ const QuestionSchema = new Schema({
         type: String,
         required: true
     },
+    QuestionTime: {
+        type: Number
+        },
     QuestionName: {
         type: String,
         required: true
@@ -101,7 +104,7 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         if(!body.QuestionBody){
             throw Error("Question Body is required")
         } 
-        const User = await this.findOne({Path:body.Path, QuestionName:body.QuestionName,QuestionBody:body.QuestionBody});
+        const User = await this.findOne({Path:body.Path, QuestionName:body.QuestionName});
         if(User){
             throw Error("Question already exist in database");
         }        

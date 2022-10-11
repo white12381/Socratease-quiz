@@ -28,6 +28,17 @@ const PostAStudent = async (req,res) => {
     }
 }
 
+const PostTime = async (req,res) => {
+    const body = req.body;
+try{
+    const result = await StudentModel.PostTime(body);
+    res.status(200).json(result);
+} catch(err){
+    res.status(400).json({error: err.message});
+    console.log(err.message);
+}
+}
+
 const DeleteAQuestion = async (req,res) => {
     const id = req.params.id
 try{
@@ -76,4 +87,4 @@ try{
 }
 }
 
-module.exports = {GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}
+module.exports = {PostTime,GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}

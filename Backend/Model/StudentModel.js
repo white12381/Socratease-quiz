@@ -9,6 +9,8 @@ const StudentSchema = new Schema({
             type: String },
             TotalPoint: {
                 type: Number },
+                            questionLength: {
+                type: Number }
     },
     Question: {
         QuestionType: {
@@ -51,6 +53,9 @@ const StudentSchema = new Schema({
                 return array.length < 4;
               }
         }
+    },
+    QuestionTime: {
+        type: Number
     },
     Mark: {
         ScoredPoint:{
@@ -100,11 +105,14 @@ StudentSchema.statics.FindAllStudents = async function(){
             throw Error("You no longer have access to this Test");
         }
 
-        if( FindStudent ){
-            const QuestionSelectedAnswer = await this.findOneAndUpdate({Student: body.Student,Question: body.Question}, {QuestionSelectedAnswer: body.QuestionSelectedAnswer});
-        return QuestionSelectedAnswer;
+       else if( FindStudent ){
+            const QuestionSelectedAnswer = await this.findOneAndUpdate({Student: body.Student,Question: body.Question}, {QuestionSelectedAnswer: body.QuestionSelectedAnswer, QuestionTime: body.QuestionTime});  
+            
+           return QuestionSelectedAnswer;
         }
-        else {
+
+        else if(!FindStudent){
+            console.log("not found Question and Student")
             return await this.create(body);
         }
     }
@@ -125,6 +133,24 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
         throw Error("Question Name does not Exist");
     }
     return {Questions,QuestionLength}
+    }
+ 
+
+    // Post time
+    StudentSchema.statics.PostTime = async function(body){
+        const FindStudent = await this.findOne({Student: body.Student}); 
+
+        const Submit = await this.findOne({Status: true, Student: body.Student});
+        if(Submit){
+            throw Error("You no longer have access to this Test");
+        } 
+          if(FindStudent){
+        const time = await this.updateMany({QuestionTime: body.QuestionTime}); 
+           console.log("updated time")
+           return time;
+          }
+ 
+        
     }
 
 

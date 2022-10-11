@@ -1,14 +1,16 @@
-import { useEffect,useContext, useState } from 'react'
+import { useEffect,useContext, useState, useLayoutEffect } from 'react'
 import AutoProctorlogo from '../Images/AutoProctorlogo.png'
 import QuestionContext from '../Context/QuestionContext'
 import { useParams } from 'react-router' 
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom' 
+import MyTimer from '../Hooks/Timerhooks'
 
 const QuestionPage = () => {
     var value;
-    const [selectedvalue, setSelectedValue] = useState(undefined);
+    const [selectedvalue, setSelectedValue] = useState('');
     const [error, setError] = useState(undefined);
+    const [clock, setClock] = useState(0);
 const navigate = useNavigate();
 const Question = useContext(QuestionContext);
 var isQuestionAnswer = [];
@@ -21,7 +23,7 @@ const setAnswerInputvalue = (val) => {
  
 
 const submitQuestion = async () => {
-    postQuestion();
+    await postQuestion();
     const response = await fetch(`http://127.0.0.1:4000/students/submitquestion`,{
     method: 'POST',
     body: JSON.stringify(Question.body),
@@ -53,8 +55,9 @@ if(response.ok){
    Question.QuestionMethods.setAnswerOptions(data.Questions[0].QuestionAnswerOptions);
    Question.QuestionMethods.setAnswers(data.Questions[0].QuestionAnswers);
    Question.QuestionMethods.setQuestionPoint(data.Questions[0].QuestionPoint)
+   Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
    Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
-   Question.QuestionMethods.setQuestionPath(path);
+   Question.QuestionMethods.setQuestionPath(path); 
    }
     }
  
@@ -68,10 +71,11 @@ if(response.ok){
        } 
        else{
         fetchQuestion();
+        setError(undefined)
        }
    }
    else{
-    Question.QuestionMethods.setQuestionLength(data.QuestionLength);
+    Question.QuestionMethods.setQuestionLength(data.Questions[0].Student.questionLength);
     Question.QuestionMethods.setTotalPoint(data.Questions[0].Student.TotalPoint);
    Question.QuestionMethods.setQuestionName(data.Questions[0].Question.QuestionName);
    Question.QuestionMethods.setQuestionType(data.Questions[0].Question.QuestionType);
@@ -82,6 +86,7 @@ if(response.ok){
    Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
    Question.QuestionMethods.setQuestionPath(path);
    Question.QuestionMethods.setSelectedAnswer(data.Questions[0].QuestionSelectedAnswer); 
+   Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
    if(data.Questions[0].QuestionSelectedAnswer.length > 0){
     setSelectedValue(setAnswerInputvalue(data.Questions[0].QuestionSelectedAnswer[0]));
    }
@@ -102,17 +107,18 @@ const data = await response.json();
 }
 
  
+const time = new Date();  
 
-useEffect(  () => {
+useEffect( () => {
     fetchAnswerQuestion();
-
 },[])
+ 
 
 const HandleNext = () => {
     
      if(Question.serialNumber < (Question.questionLength - 1)){
         Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
-        Question.QuestionMethods.setQuestionNumber(++Question.questionNumber);
+        Question.QuestionMethods.setQuestionNumber(++Question.questionNumber); 
         postQuestion();
         fetchAnswerQuestion();
      } 
@@ -124,7 +130,7 @@ const HandlePrevious = () => {
     if(Question.serialNumber > 0){
         Question.QuestionMethods.setQuestionNumber(--Question.questionNumber);
     Question.QuestionMethods.setSerialNumber(Question.serialNumber--);
-            postQuestion();
+    postQuestion();
             fetchAnswerQuestion();
         }
 }
@@ -153,15 +159,27 @@ const HandleInputSelectAnswer = (e) => {
     setSelectedValue(e.target.value)
 }
  
-    return <>
+    return <> 
+    <div style={{display: "none"}}>
+    {  time.setSeconds(  time.getSeconds() + Question.body.QuestionTime) }
+    </div>
+
     { !(error) ? 
     <div  id="QuestionPage" className='p-2'>
     <div  className="border border-5 p-3" id="offcanvas-header">
 <img src={AutoProctorlogo} alt="Logo"  width="25%" height="auto" className="d-inline-block"/>
  </div> 
- <div className='border border-5  bg-light p-3 mx-3 my-2 ps-5'>
+ <div className="row border border-5  bg-light p-3 mx-3 my-2 ps-5">
+ <div className='col-6'>
     <h5>Question Name: {Question.Question.QuestionName}</h5>
     <h5>Serial Number: {Question.questionNumber} of {Question.questionLength}</h5>
+    </div>
+    <div className="col-3">
+        {
+            (Question.body.QuestionTime > 0) ?
+    <MyTimer expiryTimestamp={time} />  : null
+}
+     </div>
     </div>
     <div className='border border-5  bg-light p-3 mx-3 ps-5'>
         <h3 dangerouslySetInnerHTML={{__html: Question.Question.QuestionBody}} />

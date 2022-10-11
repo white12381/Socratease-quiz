@@ -5,7 +5,7 @@ const QuestionContext = React.createContext();
 export const QuestionProvider = ({children}) => {
     const [QuestionType, setQuestionType] = useState(undefined);
     const [QuestionName, setQuestionName] = useState(undefined);
-    const [questionLength, setQuestionLength] = useState(undefined);
+    const [questionLength, setQuestionLength] = useState(undefined); 
     const [QuestionBody, setQuestionBody] = useState(undefined); 
     const [QuestionPath, setQuestionPath] = useState(undefined);
     const [QuestionAnswerOptions, setQuestionAnswerOptions] = useState([]);
@@ -17,6 +17,7 @@ export const QuestionProvider = ({children}) => {
     const [FullName, setFullName] = useState(localStorage.getItem("name"));
     const [Email, setEmail] = useState(localStorage.getItem("email"));
     const [TotalPoint, setTotalPoint] = useState(undefined);
+    const [QuestionTime, setQuestionTime] = useState(0);
     const [score, setScore] = useState(0) 
      
 
@@ -32,21 +33,22 @@ export const QuestionProvider = ({children}) => {
             setQuestionAnswers([...value])   
         }
 
-        const Student = { FullName,Email, TotalPoint}
+        const Student = { FullName,Email, TotalPoint,questionLength}
 
         const Question = {
             QuestionType, QuestionName,QuestionPoint,QuestionBody,
             QuestionPath, QuestionAnswerOptions,QuestionAnswers
         }
         
-        const body = {Question,Student,QuestionSelectedAnswer};
+        const body = {Question,Student,QuestionSelectedAnswer, QuestionTime};
 
 
 
     const QuestionMethods = {
         setFullName,  setEmail,setTotalPoint,setQuestionType,setQuestionName,
          setQuestionLength, setQuestionBody,setAnswerOptions,setSerialNumber,
-        setQuestionPath, setAnswers, setSelectedAnswer,setQuestionNumber,setQuestionPoint
+        setQuestionPath, setAnswers, setSelectedAnswer,setQuestionNumber,setQuestionPoint,
+        setQuestionTime
     }
 
     

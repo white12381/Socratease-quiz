@@ -3,13 +3,14 @@ const QuestionContext = React.createContext();
 
 export const QuestionProvider = ({children}) => {
 
+    var path = localStorage.getItem("email") ? localStorage.getItem("email").split("@")[0] : null;
 
 const [QuestionType, SetQuestionType] = useState("MCA");
 const [QuestionPoint, setQuestionPoint] = useState('');
 const [QuestionBody,setQuestionBody] = useState(undefined);
 const [QuestionAnswers, setQuestionAnswers] = useState([]);
 const [QuestionName, setQuestionName] = useState('');
-const [Path, setPath] = useState(localStorage.getItem("email").split("@")[0]);
+const [Path, setPath] = useState(path);
 // var QuestionAdd = []; 
 const [option1, setoption1] = useState(undefined);
 const [option2,setoption2] = useState(undefined);
