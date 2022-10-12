@@ -4,10 +4,12 @@ import QuestionContext from '../Context/QuestionContext'
 import { useParams } from 'react-router' 
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom' 
-import MyTimer from '../Hooks/Timerhooks'
+import MyTimer from '../Hooks/Timerhooks' 
+import { useLocation } from 'react-router'
 
-const QuestionPage = () => {
-    var value;
+const QuestionPage = (props) => {
+    var value; 
+    const location = useLocation();
     const [selectedvalue, setSelectedValue] = useState('');
     const [error, setError] = useState(undefined);
     const [clock, setClock] = useState(0);
@@ -24,7 +26,7 @@ const setAnswerInputvalue = (val) => {
 
 const submitQuestion = async () => {
     await postQuestion();
-    const response = await fetch(`http://127.0.0.1:4000/students/submitquestion`,{
+    const response = await fetch(`${Question.url}/students/submitquestion`,{
     method: 'POST',
     body: JSON.stringify(Question.body),
     headers: {
@@ -33,14 +35,14 @@ const submitQuestion = async () => {
 });
 const data = await response.json();
 if(response.ok){ 
-    navigate("/");
+    Question.QuestionMethods.setError(`You are successfully done with ${Question.Question.QuestionName} Test. We will get back to you on ${Question.Question.QuestionPath}@gmail.com`);
 }
  
 }
 
 
  const fetchQuestion = async () => { 
-    const response = await fetch(`http://127.0.0.1:4000/api/question/${path}/name/${name}?index=${Question.serialNumber}`);
+    const response = await fetch(`${Question.url}/api/question/${path}/name/${name}?index=${Question.serialNumber}`);
    const data = await response.json();
     if(!response.ok){
         Question.QuestionMethods.setQuestionBody(undefined);
@@ -63,15 +65,15 @@ if(response.ok){
  
 
  const fetchAnswerQuestion = async () => { 
-    const response = await fetch(`http://127.0.0.1:4000/students/${path}/name/${name}?index=${Question.serialNumber}`);
+    const response = await fetch(`${Question.url}/students/${path}/name/${name}?index=${Question.serialNumber}`);
    const data = await response.json();
     if(!response.ok){
        if((data.error === "You no longer have access to this Test")){
-                setError("You no longer have access to this Test")
+        Question.QuestionMethods.setError("You no longer have access to this Test")
        } 
        else{
         fetchQuestion();
-        setError(undefined)
+        Question.QuestionMethods.setError(undefined)
        }
    }
    else{
@@ -109,10 +111,19 @@ const data = await response.json();
  
 const time = new Date();  
 
+const authorized = ((localStorage.getItem("name") && localStorage.getItem("email")) != null);
+
 useEffect( () => {
     fetchAnswerQuestion();
+    console.log(Question.url);
 },[])
  
+useLayoutEffect( () => {
+    if(!authorized){
+    console.log(`Page link is  ${window.location.href}`);
+        navigate("/")
+     }
+})
 
 const HandleNext = () => {
     
@@ -151,7 +162,6 @@ useEffect( () => {
    if(selectedvalue !== undefined){
      const answer = [value];
     Question.QuestionMethods.setSelectedAnswer(answer);  
-    console.log("answer is " + Question.QuestionSelectedAnswer);
    }
 },[selectedvalue]);
 
@@ -164,7 +174,7 @@ const HandleInputSelectAnswer = (e) => {
     {  time.setSeconds(  time.getSeconds() + Question.body.QuestionTime) }
     </div>
 
-    { !(error) ? 
+    { !(Question.error) ? 
     <div  id="QuestionPage" className='p-2'>
     <div  className="border border-5 p-3" id="offcanvas-header">
 <img src={AutoProctorlogo} alt="Logo"  width="25%" height="auto" className="d-inline-block"/>
@@ -209,7 +219,7 @@ const HandleInputSelectAnswer = (e) => {
     <div  className="border border-5 p-3" id="offcanvas-header">
 <img src={AutoProctorlogo} alt="Logo"  width="25%" height="auto" className="d-inline-block"/>
  </div>
-  <p className='text-center fw-bolder fs-3 mt-5'>{error}</p> 
+  <p className='text-center fw-bolder fs-3 mt-5'>{Question.error}</p> 
   <Link className='btn btn-dark' id="BacktoHome" to='/' >Back to HomePage</Link>
  </div> 
 }

@@ -4,9 +4,12 @@
  import AutoProctorlogo from  "../Images/AutoProctorlogo.png"
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
- import { Link } from "react-router-dom";
+ import { Link } from "react-router-dom"; 
 
 function HomePage() {
+  const sendMail = () => {
+    console.log("sendMail");
+  }
   return (<div>
   <NavBar/>
   <div className="text-center" id="homePage" style={{minHeight: '100vh'}}>
@@ -18,7 +21,7 @@ function HomePage() {
 <Link id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"
  to="/Admin/addQuestions">
 Create Test >
-</Link>
+</Link> 
 <div className="row justify-content-evenly mt-5">
   <div className="col-12 col-md-4 text-md-start">
 <img src={students2}/>

@@ -1,5 +1,7 @@
 const {Schema} = require("mongoose");
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
+const ejs = require("ejs");
 var ObjectId = require('mongoose').Types.ObjectId;
 const QuestionSchema = new Schema({
     Path: {
@@ -106,7 +108,7 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         } 
         const User = await this.findOne({Path:body.Path, QuestionName:body.QuestionName});
         if(User){
-            throw Error("Question already exist in database");
+            throw Error("Question Name already exist. Please change question name");
         }        
        
        // Validate Question Answer Options
@@ -215,6 +217,45 @@ QuestionSchema.statics.UpdateAQuestion = async function(_id,body){
     }
     const updates = await this.findByIdAndUpdate(_id,body);
     return updates;
+}
+
+// Send Email
+QuestionSchema.statics.SendEmail = async function(body){
+     const Path = body.Path;  
+     const QuestionName = body.QuestionName;
+     const Url = `http://127.0.0.1:3000/student/Question/${Path}/${QuestionName}`
+
+     
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'olasunkanmiusman1111@gmail.com',
+      pass: 'xfllgisqcbstpbgj' 
+    }
+  });
+
+
+  ejs.renderFile(__dirname +  "/../view/index.ejs", {Url: Url}, function(err,data){
+    if(err){
+        console.log(err)
+    }
+    else{
+        const mailOptions = {
+            from: 'AutoProctor@Socratease.com',
+            to: 'olasunkanmiusman1111@gmail.com',
+            subject: '[AutoProctor] Test Created',
+            html:   data
+          };
+        
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+    }
+  })
 }
 
 const QuestionModel = mongoose.model("Socratease Quiz",QuestionSchema);

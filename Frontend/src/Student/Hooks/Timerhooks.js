@@ -9,7 +9,7 @@ function MyTimer({expiryTimestamp}){
   const navigate = useNavigate()
   
 const submitQuestion = async () => { 
-  const response = await fetch(`http://127.0.0.1:4000/students/submitquestion`,{
+  const response = await fetch(`${Question.url}/students/submitquestion`,{
   method: 'POST',
   body: JSON.stringify(Question.body),
   headers: {
@@ -18,7 +18,7 @@ const submitQuestion = async () => {
 })
 const data = await response.json();
 if(response.ok){ 
-    navigate("/");
+  Question.QuestionMethods.setError(`Your time is Up and your responses has been submitted. We will get back to you on ${Question.Question.QuestionPath}@gmail.com`);
 }
 }
 
@@ -36,7 +36,7 @@ if(response.ok){
  
            
       const UpdateTime = async () => {
-        const response = await fetch(`http://127.0.0.1:4000/students/time`,{
+        const response = await fetch(`${Question.url}/students/time`,{
             method: 'PATCH',
             body: JSON.stringify(Question.body),
             headers: {

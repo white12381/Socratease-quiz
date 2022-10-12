@@ -18,7 +18,8 @@ export const QuestionProvider = ({children}) => {
     const [Email, setEmail] = useState(localStorage.getItem("email"));
     const [TotalPoint, setTotalPoint] = useState(undefined);
     const [QuestionTime, setQuestionTime] = useState(0);
-    const [score, setScore] = useState(0) 
+    const [error, setError] = useState(undefined);
+    const url = (`http://127.0.0.1:4000`);
      
 
         const setAnswerOptions = (value) => {
@@ -48,12 +49,12 @@ export const QuestionProvider = ({children}) => {
         setFullName,  setEmail,setTotalPoint,setQuestionType,setQuestionName,
          setQuestionLength, setQuestionBody,setAnswerOptions,setSerialNumber,
         setQuestionPath, setAnswers, setSelectedAnswer,setQuestionNumber,setQuestionPoint,
-        setQuestionTime
+        setQuestionTime, setError
     }
 
     
 
-    return <QuestionContext.Provider value={{body,questionLength,QuestionSelectedAnswer, QuestionMethods, Student, Question,serialNumber, questionNumber,}}>
+    return <QuestionContext.Provider value={{url,error,body,questionLength,QuestionSelectedAnswer, QuestionMethods, Student, Question,serialNumber, questionNumber,}}>
     {children}
     </QuestionContext.Provider>
 }

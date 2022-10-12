@@ -80,5 +80,16 @@ res.status(200).json(response);
     }
 }
 
+// Send Email
+const SendEmail = async (req,res) => {
+    const body = req.body;
+    console.log(body);
+try{
+    const result = await QuestionModel.SendEmail(body);
+    res.status(200).json(result);
+} catch(err){
+    res.status(400).json({error: err.message});
+}
+}
 
-module.exports = {GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion}
+module.exports = {SendEmail, GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion}

@@ -28,23 +28,31 @@ else {
 }  
 }
 
+var QuestionName = Question.QuestionValues.QuestionName;
+var Path = Question.QuestionValues.Path;
+const body = {QuestionName, Path};
+
 const SaveBtn = async () => { 
     const toastId = 2;
     const temp = [...QuestionAdd];
+    var success = true;
     if(QuestionAdd.length > 0){
         for(let i = 0; i < QuestionAdd.length; i++){
             QuestionAdd[i].QuestionName = Question.QuestionValues.QuestionName;
             QuestionAdd[i].QuestionTime = localStorage.getItem("timer");
-   const response = await fetch('http://127.0.0.1:4000/api/question',{
+   const response = await fetch(`${Question.url}/api/question`,{
             method: 'POST', 
             body: JSON.stringify(QuestionAdd[i]),
             headers: {'Content-Type': 'application/json'}
 });
 
+const index = await temp.indexOf(QuestionAdd[i]); 
+
 
 const data = await response.json();
  
 if(!response.ok){
+    success = false; 
     const err = data.error;
     const toastId = 3;
     toast.error(err ,{
@@ -53,17 +61,36 @@ if(!response.ok){
         toastId: toastId,
         hideProgressBar: true
     });
+
 }
 else{
-    toast.success("Question Created Successfuly",{
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-        toastId: toastId,
-        hideProgressBar: true
-    })
-}
-Question.setAddQuestion([]);
+    await temp.splice(index,1);
+   }
 
+
+    }
+
+    if(success){
+        toast.success("Question Created Successfuly",{
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            toastId: toastId,
+            hideProgressBar: true
+        });
+     
+    const response = await fetch(`${Question.url}/api/sendEmail`,{
+        method: 'POST', 
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+});
+const data = await response.json();
+if(response.ok){
+    alert("Email send SuccessFully");
+}
+else{
+    alert("Email not Successfully");
+    console.log(response.error);
+}
     }
 
     localStorage.removeItem("timer");

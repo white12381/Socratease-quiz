@@ -1,5 +1,5 @@
 const questionRoutes = require("express").Router();
-const {GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion} = require("../controller/QuestionController");
+const {SendEmail,GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion} = require("../controller/QuestionController");
 
 // Get all questions
 questionRoutes.get('/questions',GetallQuestions);
@@ -21,5 +21,8 @@ questionRoutes.delete('/question/:id',DeleteAQuestion);
 
 // Update A Question
 questionRoutes.patch('/question/:id',UpdateAQuestion);
+
+// Send Email to Admin User
+questionRoutes.post('/sendEmail', SendEmail);
 
 module.exports = questionRoutes;
