@@ -5,11 +5,33 @@
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
  import { Link } from "react-router-dom"; 
+import { useEffect, useState, useContext } from "react";
+import QuestionContext from "../Student/Context/QuestionContext";
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function HomePage() {
-  const sendMail = () => {
-    console.log("sendMail");
+const [showTestButton, setShowTestButton] = useState(false);
+const Question = useContext(QuestionContext);
+
+useEffect( () => {
+  const toastId = 1;
+  if(Question.showTest){
+    toast.success("Now Continue to Test",{
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+      toastId: toastId,
+      hideProgressBar: true
+  });
   }
+
+  if(localStorage.getItem("Testurl") && localStorage.getItem("email") && localStorage.getItem("name")){
+    setShowTestButton(true);
+  }  
+  else{
+    setShowTestButton(false);
+  } 
+})  
   return (<div>
   <NavBar/>
   <div className="text-center" id="homePage" style={{minHeight: '100vh'}}>
@@ -17,11 +39,17 @@ function HomePage() {
     Fully Automated Exam Proctoring
   </h1>
   <h5 className="fw-light text-center mt-5"> No more Cheating on Online Tests</h5>
-<Link to="student/Question/olasunkanmiusman1111/Demo" id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder btn-lg">Take Demo Test > </Link>
+<Link to="student/Question/olasunkanmiusman1111/Demo" id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder btn-lg">Take Demo Test &gt; </Link>
 <Link id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"
- to="/Admin/addQuestions">
-Create Test >
-</Link> 
+ to="/Admin/addQuestions"> Create Test &gt; </Link> 
+
+{
+  Question.showTest && (
+    <Link id="taketest" className="btn btn-light me-5 rounded-pill btn-outline-success fw-bolder  btn-lg"
+ to={localStorage.getItem("Testurl")}> Go To Test &gt; </Link> 
+  )
+}
+
 <div className="row justify-content-evenly mt-5">
   <div className="col-12 col-md-4 text-md-start">
 <img src={students2}/>

@@ -7,6 +7,9 @@ const StudentSchema = new Schema({
          type: String },
         Email:{
             type: String },
+            QuestionName: {
+                type:String, 
+            },
             TotalPoint: {
                 type: Number },
                             questionLength: {
@@ -59,9 +62,13 @@ const StudentSchema = new Schema({
     },
     Mark: {
         ScoredPoint:{
-            type:  Number },
+            type:  Number,
+            default: 0
+        },
         Percentage:{
-       type:  Number }
+       type:  Number,
+        default: 0
+    }
     },
     Status: {
         type: Boolean
@@ -98,23 +105,32 @@ StudentSchema.statics.FindAllStudents = async function(){
 
     // Post Student Question and StudentDetails
     StudentSchema.statics.PostStudent = async function(body){
-        const FindStudent = await this.findOne({Student: body.Student,Question: body.Question}); 
+        const filter = {
+            'Student.QuestionName': body.Student.QuestionName,
+            'Student.FullName': body.Student.FullName,
+            'Student.TotalPoint': body.Student.TotalPoint,
+            'Student.questionLength': body.Student.questionLength,
+            'Question.QuestionType': body.Question.QuestionType,
+            'Question.QuestionName': body.Question.QuestionName,
+            'Question.QuestionPoint': body.Question.QuestionPoint,
+            'Question.QuestionBody': body.Question.QuestionBody,
+            'Question.QuestionPath': body.Question.QuestionPath
 
+        }
+        const FindStudent = await this.findOne(filter); 
         const Submit = await this.findOne({Status: true, Student: body.Student});
         if(Submit){
             throw Error("You no longer have access to this Test");
         }
-
-       else if( FindStudent ){
-            const QuestionSelectedAnswer = await this.findOneAndUpdate({Student: body.Student,Question: body.Question}, {QuestionSelectedAnswer: body.QuestionSelectedAnswer, QuestionTime: body.QuestionTime});  
-            
+         console.log("Find Student ", FindStudent);
+         console.log("Body", body);
+        if( FindStudent ){
+            const QuestionSelectedAnswer = await this.findOneAndUpdate(filter,{QuestionSelectedAnswer: body.QuestionSelectedAnswer, QuestionTime: body.QuestionTime});     
            return QuestionSelectedAnswer;
         }
 
-        else if(!FindStudent){
             console.log("not found Question and Student")
             return await this.create(body);
-        }
     }
 
 
@@ -124,8 +140,8 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
     const QuestionLength = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).count();
     
     const email = path + '@gmail.com';
-    const Submit = await this.findOne({Status: true, 'Student.Email': email});
-        if(Submit){
+    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name }); 
+        if(Submit.length > 0){
             throw Error("You no longer have access to this Test");
         }
     
@@ -138,14 +154,22 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
 
     // Post time
     StudentSchema.statics.PostTime = async function(body){
-        const FindStudent = await this.findOne({Student: body.Student}); 
 
-        const Submit = await this.findOne({Status: true, Student: body.Student});
-        if(Submit){
+        const filter = {
+            'Student.QuestionName': body.Student.QuestionName,
+            'Student.FullName': body.Student.FullName,
+            'Student.TotalPoint': body.Student.TotalPoint,
+            'Student.questionLength': body.Student.questionLength
+                }
+
+        const FindStudent = await this.findOne(filter); 
+
+        const Submit = await this.find({Status: true, Student: body.Student});
+        if(Submit.length > 0){
             throw Error("You no longer have access to this Test");
         } 
           if(FindStudent){
-        const time = await this.updateMany({QuestionTime: body.QuestionTime}); 
+        const time = await this.updateMany(filter,{QuestionTime: body.QuestionTime}); 
            console.log("updated time")
            return time;
           }
@@ -160,11 +184,20 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
 
 
     // Submit Test
-    StudentSchema.statics.SubmitTest = async function(body){
-        const FindStudent = await this.find(body.Student);
+    StudentSchema.statics.SubmitTest = async function(body){ 
+
+            
+
+        const filter = {
+            'Student.QuestionName': body.Student.QuestionName,
+            'Student.FullName': body.Student.FullName,
+            'Student.TotalPoint': body.Student.TotalPoint,
+            'Student.questionLength': body.Student.questionLength
+                }
+
+        const FindStudent = await this.find(filter);
         var TotalPoint =  body.Student.TotalPoint;
-        var ScoredPoint = 0.0;
-        var Percentage = 0.0;
+     
 
         const compareArrays = (arr1, arr2) => {
             if(arr1.length !== arr2.length){
@@ -177,7 +210,7 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
             }
             return true
         }
-
+        console.log("body.student ", body.Student);
         const Submit = await this.findOne({Status: true, Student: body.Student});
         if(Submit){
             throw Error("You no longer have access to this Test");
@@ -186,20 +219,28 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
             throw Error("UnSaved Test");
         }
 
-        await this.create(body);
-
+        let ScoredPoint = 0; 
+        var Percentage = 0.0;
             for(let i = 0; i < FindStudent.length; i++ ){
                 if(compareArrays(FindStudent[i].Question.QuestionAnswers,FindStudent[i].QuestionSelectedAnswer) ){
-                    ScoredPoint += FindStudent[i].Question.QuestionPoint;
-                }
+                    if((FindStudent[i].Question.QuestionPoint !== undefined)){
+                    ScoredPoint += FindStudent[i].Question.QuestionPoint; 
+                    }
+                } 
+            }  
+                
+            Percentage = Math.floor((ScoredPoint / TotalPoint) * 100);
+
+            if(Number.isNaN(ScoredPoint) ){
+                ScoredPoint = 0;
+                Percentage = 0; 
             }
-            if(ScoredPoint === 0){
+            if(Number.isNaN(Percentage) ){
                 Percentage = 0;
+                ScoredPoint = 0;
             }
-            else{
-            Percentage = (ScoredPoint / TotalPoint) * 100;
-            }
-            await this.deleteMany(body.Student);
+            await this.deleteMany(filter); 
+            console.log("score", ScoredPoint, "Percentage", Percentage)
             return await this.create({'Student': body.Student, Mark: {ScoredPoint: ScoredPoint, Percentage: Percentage},Status: true})
     }
 

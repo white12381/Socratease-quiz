@@ -27,9 +27,12 @@ else {
     });
 }  
 }
+// 127.0.0.1:3000olasunkanmiusman1111/codes2
 
-var QuestionName = Question.QuestionValues.QuestionName;
-var Path = Question.QuestionValues.Path;
+// http://127.0.0.1:3000/student/Question/olasunkanmiusman1111/Demo
+
+var QuestionName = Question.QuestionValues.Path + "/" + Question.QuestionValues.QuestionName;
+var Path =  window.location.host  + "/student/Question";
 const body = {QuestionName, Path};
 
 const SaveBtn = async () => { 
@@ -85,10 +88,9 @@ else{
 });
 const data = await response.json();
 if(response.ok){
-    alert("Email send SuccessFully");
+    console.log("Email send SuccessFully");
 }
-else{
-    alert("Email not Successfully");
+else{ 
     console.log(response.error);
 }
     }

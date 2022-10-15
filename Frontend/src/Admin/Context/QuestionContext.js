@@ -39,7 +39,7 @@ useEffect( () => {
         }
         if(option4){
         QuestionAnswerOptions.push(option4);
-        } 
+        }  
 })
 
 const setQuestionType = (value) => {

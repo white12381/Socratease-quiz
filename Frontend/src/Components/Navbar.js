@@ -20,15 +20,22 @@ if(!localStorage.getItem("name")){
 }
 if(!localStorage.getItem("email")){
   setEmail(undefined)
+} 
+
+if(localStorage.getItem("Testurl") && localStorage.getItem("email") && localStorage.getItem("name")){
+  localStorage.setItem("showTest",true);
+}  
+else{
+  localStorage.removeItem("showTest");
 }
-console.log(name,email);
+
   })
 
   const HandleSignIn = async () => {
     await signIn();
   }
 
-  const HandleSignOut = async () => {
+  const HandleSignOut = async () => { 
     await signout();
   }
 
@@ -79,7 +86,7 @@ console.log(name,email);
 )}
 {(name && email) && (
 <a> <h1 className='mt-5 text-primary  bolder' onClick={HandleSignOut}>
-<FontAwesomeIcon icon={faSignOut}/> Logout </h1></a>
+<FontAwesomeIcon icon={faSignOut}  /> Logout </h1></a>
 )}
   </div>
   </div>

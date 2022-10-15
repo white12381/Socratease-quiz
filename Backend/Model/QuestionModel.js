@@ -223,7 +223,7 @@ QuestionSchema.statics.UpdateAQuestion = async function(_id,body){
 QuestionSchema.statics.SendEmail = async function(body){
      const Path = body.Path;  
      const QuestionName = body.QuestionName;
-     const Url = `http://127.0.0.1:3000/student/Question/${Path}/${QuestionName}`
+     const Url = `${Path}/${QuestionName}`
 
      
 const transporter = nodemailer.createTransport({

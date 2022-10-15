@@ -6,9 +6,13 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom' 
 import MyTimer from '../Hooks/Timerhooks' 
 import { useLocation } from 'react-router'
+import GoogleLoginAuth from '../../Components/GoogleLoginAuth'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const QuestionPage = (props) => {
-    var value; 
+    const {signIn} = GoogleLoginAuth();
+    var value;  
     const location = useLocation();
     const [selectedvalue, setSelectedValue] = useState('');
     const [error, setError] = useState(undefined);
@@ -18,13 +22,29 @@ const Question = useContext(QuestionContext);
 var isQuestionAnswer = [];
 const {name,path} = useParams();
 
+const authorized = ((localStorage.getItem("name") && localStorage.getItem("email")) != null);
+
+useLayoutEffect( () => {
+    const toastId = 3;
+    if(!authorized){ 
+        localStorage.setItem("Testurl",location.pathname)
+        navigate("/");
+        toast.success("Please Sign In to Continue",{
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            toastId: toastId,
+            hideProgressBar: true
+        });
+     }
+})
+
  
 const setAnswerInputvalue = (val) => {
    return  val.replace(/<(.|\n)*?>/g,'').trim();
 }
  
 
-const submitQuestion = async () => {
+const submitQuestion = async () => { 
     await postQuestion();
     const response = await fetch(`${Question.url}/students/submitquestion`,{
     method: 'POST',
@@ -36,6 +56,8 @@ const submitQuestion = async () => {
 const data = await response.json();
 if(response.ok){ 
     Question.QuestionMethods.setError(`You are successfully done with ${Question.Question.QuestionName} Test. We will get back to you on ${Question.Question.QuestionPath}@gmail.com`);
+    localStorage.removeItem("showTest");
+    localStorage.removeItem("Testurl");
 }
  
 }
@@ -111,19 +133,12 @@ const data = await response.json();
  
 const time = new Date();  
 
-const authorized = ((localStorage.getItem("name") && localStorage.getItem("email")) != null);
 
 useEffect( () => {
-    fetchAnswerQuestion();
-    console.log(Question.url);
+    fetchAnswerQuestion(); 
 },[])
  
-useLayoutEffect( () => {
-    if(!authorized){
-    console.log(`Page link is  ${window.location.href}`);
-        navigate("/")
-     }
-})
+
 
 const HandleNext = () => {
     

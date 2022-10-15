@@ -15,6 +15,7 @@ app.set('view engine', 'ejs')
 app.use(express.json());
 app.use(cors());
 // Connect to Mongodb
+
 mongoose.connect(process.env.MONGO_URI, () => {
     app.listen(process.env.PORT, () => console.log(`app running on port ${process.env.PORT}`));
 });

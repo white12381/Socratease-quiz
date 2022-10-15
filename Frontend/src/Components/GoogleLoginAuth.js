@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
+import QuestionContext from "../Student/Context/QuestionContext";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGzQnv3hq7wLaJuIywThq_f8MNbRDXzE4",
@@ -17,8 +19,8 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
 
-
 const GoogleLoginAuth = () => {
+  const Question = useContext(QuestionContext);
   const navigate = useNavigate();
   const signIn = async () =>{
     signInWithPopup(auth, provider)
@@ -27,6 +29,10 @@ const GoogleLoginAuth = () => {
         const email = result.user.email;
         localStorage.setItem('name',name);
         localStorage.setItem('email',email); 
+        if(localStorage.getItem("Testurl")){
+          localStorage.setItem("showTest",true);
+          Question.QuestionMethods.setShowTest(true)
+        }
         navigate("/");
       
       }).catch((error) => { 
@@ -40,7 +46,10 @@ const GoogleLoginAuth = () => {
     const signout = async () => {
       signOut(auth).then(() => {
         localStorage.removeItem("name");
-        localStorage.removeItem("email");  
+        localStorage.removeItem("email"); 
+        localStorage.removeItem("showTest");
+        localStorage.removeItem("Testurl");
+        Question.QuestionMethods.setShowTest(false)
         navigate("/");  
       }).catch((error) => {
         console.log(error);
