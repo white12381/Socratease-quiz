@@ -26,10 +26,7 @@ else {
         hideProgressBar: true
     });
 }  
-}
-// 127.0.0.1:3000olasunkanmiusman1111/codes2
-
-// http://127.0.0.1:3000/student/Question/olasunkanmiusman1111/Demo
+} 
 
 var QuestionName = Question.QuestionValues.Path + "/" + Question.QuestionValues.QuestionName;
 var Path =  window.location.host  + "/student/Question";
@@ -74,28 +71,39 @@ else{
     }
 
     if(success){
-        toast.success("Question Created Successfuly",{
+
+        const response = await fetch(`${Question.url}/api/sendEmail`,{
+            method: 'POST', 
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+    });
+    const data = await response.json();
+    console.log("email response from server " + data)
+    if(response.ok){
+        toast.success("Question Created Successfuly, check your Gmail for Question link",{
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2000,
             toastId: toastId,
             hideProgressBar: true
         });
-     
-    const response = await fetch(`${Question.url}/api/sendEmail`,{
-        method: 'POST', 
-        body: JSON.stringify(body),
-        headers: {'Content-Type': 'application/json'}
-});
-const data = await response.json();
-if(response.ok){
-    console.log("Email send SuccessFully");
-}
-else{ 
-    console.log(response.error);
-}
+        localStorage.removeItem("timer");
+        // Question.setAddQuestion([])
+    }
+    else{ 
+        console.log(response.error);
+        const toastId = 3;
+        toast.error("Network Error, Please try again later" ,{
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            toastId: toastId,
+            hideProgressBar: true
+        });
     }
 
-    localStorage.removeItem("timer");
+
+    }
+
+
      
 }
 

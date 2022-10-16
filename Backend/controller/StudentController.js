@@ -64,6 +64,19 @@ const index = req.query.index || 0;
         }
 }
 
+// Get Questions by Name
+const GetLastQuestionByPathAndName = async (req,res) => {
+    const path = decodeURI(req.params.path).toString();
+    const name = req.params.name.toString();
+ 
+    try{
+        const response = await StudentModel.GetLastQuestionByPathAndName(path,name);
+        res.status(200).json(response);
+        }catch(err){
+            res.status(400).json({error: err.message});
+        }
+}
+
 
 
 const DeleteQuestionByEmail = async (req,res) => {
@@ -90,4 +103,4 @@ try{
 
 
 
-module.exports = {PostTime,GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}
+module.exports = {GetLastQuestionByPathAndName,PostTime,GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}

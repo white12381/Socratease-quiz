@@ -135,7 +135,40 @@ const time = new Date();
 
 
 useEffect( () => {
-    fetchAnswerQuestion(); 
+    const fetchLastAnswerQuestion = async () => { 
+        const response = await fetch(`${Question.url}/students/last/${path}/name/${name}`);
+       const data = await response.json();
+        if(!response.ok){
+           if((data.error === "You no longer have access to this Test")){
+            Question.QuestionMethods.setError("You no longer have access to this Test")
+           } 
+           else{
+            fetchAnswerQuestion();
+            Question.QuestionMethods.setError(undefined)
+            console.log("back to index 1");
+           }
+       }
+       else{
+        console.log("last Question") 
+        Question.QuestionMethods.setQuestionLength(data.Questions[0].Student.questionLength);
+        Question.QuestionMethods.setTotalPoint(data.Questions[0].Student.TotalPoint);
+       Question.QuestionMethods.setQuestionName(data.Questions[0].Question.QuestionName);
+       Question.QuestionMethods.setQuestionType(data.Questions[0].Question.QuestionType);
+       Question.QuestionMethods.setQuestionBody(data.Questions[0].Question.QuestionBody);
+       Question.QuestionMethods.setAnswerOptions(data.Questions[0].Question.QuestionAnswerOptions);
+       Question.QuestionMethods.setAnswers(data.Questions[0].Question.QuestionAnswers);
+       Question.QuestionMethods.setQuestionPoint(data.Questions[0].Question.QuestionPoint)
+       Question.QuestionMethods.setSerialNumber(data.QuestionLength - 1);
+       Question.QuestionMethods.setQuestionPath(path);
+       Question.QuestionMethods.setQuestionNumber(data.QuestionLength)
+       Question.QuestionMethods.setSelectedAnswer(data.Questions[0].QuestionSelectedAnswer); 
+       Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
+       if(data.Questions[0].QuestionSelectedAnswer.length > 0){
+        setSelectedValue(setAnswerInputvalue(data.Questions[0].QuestionSelectedAnswer[0]));
+       }
+       }
+        }
+        fetchLastAnswerQuestion();
 },[])
  
 

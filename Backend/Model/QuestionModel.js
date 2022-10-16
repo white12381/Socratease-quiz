@@ -85,6 +85,8 @@ if(Questions.length < 1){
 return {Questions,QuestionLength,TotalPoint}
 }
 
+ 
+
 // Post  AQuestion
 QuestionSchema.statics.PostAQuestion = async function(body){
 
@@ -222,22 +224,31 @@ QuestionSchema.statics.UpdateAQuestion = async function(_id,body){
 // Send Email
 QuestionSchema.statics.SendEmail = async function(body){
      const Path = body.Path;  
-     const QuestionName = body.QuestionName;
+     const QuestionName = body.QuestionName; 
      const Url = `${Path}/${QuestionName}`
-
+        var EmailSent = true
+    const questionpath = QuestionName.split('/')[0];
+    const questionname  = QuestionName.split('/')[1];
+    const filter = {
+        QuestionName: questionname,
+        Path: questionpath
+    } 
      
+    let response = '';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'olasunkanmiusman1111@gmail.com',
-      pass: 'xfllgisqcbstpbgj' 
+      pass: process.env.PASS 
     }
   });
 
 
-  ejs.renderFile(__dirname +  "/../view/index.ejs", {Url: Url}, function(err,data){
+  ejs.renderFile(__dirname +  "/../view/index.ejs", {Url: Url}, async (err,data) => {
     if(err){
-        console.log(err)
+        console.log(err);
+        await this.deleteMany(filter); 
+        response += "Error with sending Email" 
     }
     else{
         const mailOptions = {
@@ -247,15 +258,20 @@ const transporter = nodemailer.createTransport({
             html:   data
           };
         
-          transporter.sendMail(mailOptions, function(error, info){
+          transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
-              console.log(error);
+              console.log("error" + error);
+              await this.deleteMany(filter); 
+              response += "Error with sending Email"
             } else {
               console.log('Email sent: ' + info.response);
+              response += "No Error with sending Email"
             }
           });
     }
   })
+  console.log(response)
+  return response;
 }
 
 const QuestionModel = mongoose.model("Socratease Quiz",QuestionSchema);

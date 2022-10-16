@@ -150,6 +150,23 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
     }
     return {Questions,QuestionLength}
     }
+
+    // Find last Question
+    StudentSchema.statics.GetLastQuestionByPathAndName = async function(path,name){
+        const QuestionLength = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).count();        
+    const Questions = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).limit(1).skip(QuestionLength - 1);
+    const email = path + '@gmail.com';
+    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name }); 
+        if(Submit.length > 0){
+            throw Error("You no longer have access to this Test");
+        }
+    
+    if(Questions.length < 1){
+        throw Error("Question Name does not Exist");
+    }
+    return {Questions,QuestionLength}
+    }
+
  
 
     // Post time
