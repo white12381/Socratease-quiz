@@ -19,8 +19,8 @@ export const QuestionProvider = ({children}) => {
     const [TotalPoint, setTotalPoint] = useState(undefined);
     const [QuestionTime, setQuestionTime] = useState(0);
     const [showTest, setShowTest] = useState(false);
-    const [error, setError] = useState(undefined);
-    const url = (`http://127.0.0.1:4000`);
+    const [error, setError] = useState(undefined); 
+    const url = (`http://127.0.0.1:4000`); 
      
 
         const setAnswerOptions = (value) => {
@@ -35,14 +35,15 @@ export const QuestionProvider = ({children}) => {
             setQuestionAnswers([...value])   
         }
 
-        const Student = { FullName,Email, TotalPoint,questionLength,QuestionName}
+        const Student = { FullName,Email, TotalPoint,questionLength,QuestionName,QuestionPath}
 
         const Question = {
             QuestionType, QuestionName,QuestionPoint,QuestionBody,
             QuestionPath, QuestionAnswerOptions,QuestionAnswers
         }
+        var Path =  window.location.host  + "/admin/report/" + QuestionPath;
         
-        const body = {Question,Student,QuestionSelectedAnswer, QuestionTime};
+        const body = {Question,Student,QuestionSelectedAnswer, QuestionTime,Path};
 
 
 

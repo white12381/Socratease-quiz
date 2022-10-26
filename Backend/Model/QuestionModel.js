@@ -253,7 +253,7 @@ const transporter = nodemailer.createTransport({
     else{
         const mailOptions = {
             from: 'AutoProctor@Socratease.com',
-            to: 'olasunkanmiusman1111@gmail.com',
+            to: body.email,
             subject: '[AutoProctor] Test Created',
             html:   data
           };

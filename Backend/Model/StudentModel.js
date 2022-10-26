@@ -1,5 +1,7 @@
+const ejs = require("ejs");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const nodemailer = require("nodemailer");
 
 const StudentSchema = new Schema({
     Student: {
@@ -8,6 +10,9 @@ const StudentSchema = new Schema({
         Email:{
             type: String },
             QuestionName: {
+                type:String, 
+            },
+            QuestionPath: {
                 type:String, 
             },
             TotalPoint: {
@@ -72,6 +77,10 @@ const StudentSchema = new Schema({
     },
     Status: {
         type: Boolean
+    },
+    ResultSent:{
+        type: String,
+        default: "No"
     }
  },{timestamps: true});
 
@@ -114,16 +123,16 @@ StudentSchema.statics.FindAllStudents = async function(){
             'Question.QuestionName': body.Question.QuestionName,
             'Question.QuestionPoint': body.Question.QuestionPoint,
             'Question.QuestionBody': body.Question.QuestionBody,
-            'Question.QuestionPath': body.Question.QuestionPath
+            'Question.QuestionPath': body.Question.QuestionPath,
+            'Student.QuestionPath': body.Student.QuestionPath
 
         }
         const FindStudent = await this.findOne(filter); 
         const Submit = await this.findOne({Status: true, Student: body.Student});
         if(Submit){
             throw Error("You no longer have access to this Test");
-        }
-         console.log("Find Student ", FindStudent);
-         console.log("Body", body);
+        } 
+
         if( FindStudent ){
             const QuestionSelectedAnswer = await this.findOneAndUpdate(filter,{QuestionSelectedAnswer: body.QuestionSelectedAnswer, QuestionTime: body.QuestionTime});     
            return QuestionSelectedAnswer;
@@ -134,15 +143,14 @@ StudentSchema.statics.FindAllStudents = async function(){
     }
 
 
-    // Find Question By name
-StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index){ 
-    const Questions = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).limit(1).skip(index);
-    const QuestionLength = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).count();
-    
-    const email = path + '@gmail.com';
-    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name }); 
+    // Find Question By name                                     
+StudentSchema.statics.GetAQuestionByPathAndName = async function(questionpath,name,email,index){ 
+    const Questions = await this.find({'Question.QuestionPath': questionpath, 'Question.QuestionName': name, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath}).limit(1).skip(index);
+    const QuestionLength = await this.find({'Question.QuestionPath': questionpath, 'Question.QuestionName': name, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath}).count();
+    console.log("StudentEmail " + email); 
+    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath }); 
         if(Submit.length > 0){
-            throw Error("You no longer have access to this Test");
+            throw Error("You no longer have access to this Test"); 
         }
     
     if(Questions.length < 1){
@@ -151,15 +159,33 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
     return {Questions,QuestionLength}
     }
 
-    // Find last Question
-    StudentSchema.statics.GetLastQuestionByPathAndName = async function(path,name){
-        const QuestionLength = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).count();        
-    const Questions = await this.find({'Question.QuestionPath': path, 'Student.QuestionName': name}).limit(1).skip(QuestionLength - 1);
+
+     // Find Question By email and Status
+StudentSchema.statics.GetQuestionsByPathAndStatus = async function(path){ 
     const email = path + '@gmail.com';
-    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name }); 
-        if(Submit.length > 0){
+    const Questions = await this.find({'Student.QuestionPath': path, Status: true}).sort({createdAt: 'desc'})
+    const QuestionName  = await this.find({'Student.QuestionPath': path, Status: true}).sort({createdAt: 'desc'}).distinct('Student.QuestionName');
+                     
+            console.log("Question by email and Status");
+    if(Questions.length < 1){
+        throw Error("Question Name does not Exist");
+    }
+    return {Questions, QuestionName};
+    }
+
+
+    // Find last Question                                                                        
+    StudentSchema.statics.GetLastQuestionByPathAndName = async function(email,name,questionpath){
+        const QuestionLength = await this.find({'Question.QuestionPath': questionpath, 'Question.QuestionName': name, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath}).count();        
+    const Questions = await this.find({'Question.QuestionPath': questionpath, 'Question.QuestionName': name, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath}).limit(1).skip(QuestionLength - 1); 
+    const Submit = await this.find({Status: true, 'Student.Email': email,'Student.QuestionName': name, 'Student.QuestionPath': questionpath }); 
+        
+            console.log(" Questionpath " + questionpath + " QuestionName " + name + " Student email " + email );
+    if(Submit.length > 0){
+            console.log("Error no last question");
             throw Error("You no longer have access to this Test");
         }
+ 
     
     if(Questions.length < 1){
         throw Error("Question Name does not Exist");
@@ -172,21 +198,35 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
     // Post time
     StudentSchema.statics.PostTime = async function(body){
 
+
+
         const filter = {
             'Student.QuestionName': body.Student.QuestionName,
             'Student.FullName': body.Student.FullName,
             'Student.TotalPoint': body.Student.TotalPoint,
-            'Student.questionLength': body.Student.questionLength
+            'Student.questionLength': body.Student.questionLength,
+            'Student.QuestionPath': body.Student.QuestionPath,
+             Status: true
                 }
 
-        const FindStudent = await this.findOne(filter); 
+        const filterupdates = {
+            'Student.QuestionName': body.Student.QuestionName,
+            'Student.FullName': body.Student.FullName,
+            'Student.TotalPoint': body.Student.TotalPoint,
+            'Student.questionLength': body.Student.questionLength,
+            'Student.QuestionPath': body.Student.QuestionPath
+        }
 
-        const Submit = await this.find({Status: true, Student: body.Student});
+        const FindStudent = await this.findOne(filterupdates); 
+
+        const Submit = await this.find(filter);
         if(Submit.length > 0){
+            console.log("submit",Submit);
+            console.log("Body", body.Student);
             throw Error("You no longer have access to this Test");
         } 
           if(FindStudent){
-        const time = await this.updateMany(filter,{QuestionTime: body.QuestionTime}); 
+        const time = await this.updateMany(filterupdates,{QuestionTime: body.QuestionTime}); 
            console.log("updated time")
            return time;
           }
@@ -203,13 +243,21 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
     // Submit Test
     StudentSchema.statics.SubmitTest = async function(body){ 
 
-            
+        const filtersubmit = {
+            'Student.QuestionName': body.Student.QuestionName,
+            'Student.FullName': body.Student.FullName,
+            'Student.TotalPoint': body.Student.TotalPoint,
+            'Student.questionLength': body.Student.questionLength,
+            'Student.QuestionPath': body.Student.QuestionPath,
+             Status: true
+                }
 
         const filter = {
             'Student.QuestionName': body.Student.QuestionName,
             'Student.FullName': body.Student.FullName,
             'Student.TotalPoint': body.Student.TotalPoint,
-            'Student.questionLength': body.Student.questionLength
+            'Student.questionLength': body.Student.questionLength,
+            'Student.QuestionPath': body.Student.QuestionPath
                 }
 
         const FindStudent = await this.find(filter);
@@ -228,7 +276,7 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
             return true
         }
         console.log("body.student ", body.Student);
-        const Submit = await this.findOne({Status: true, Student: body.Student});
+        const Submit = await this.findOne(filtersubmit);
         if(Submit){
             throw Error("You no longer have access to this Test");
         }
@@ -257,8 +305,46 @@ StudentSchema.statics.GetAQuestionByPathAndName = async function(path,name,index
                 ScoredPoint = 0;
             }
             await this.deleteMany(filter); 
-            console.log("score", ScoredPoint, "Percentage", Percentage)
-            return await this.create({'Student': body.Student, Mark: {ScoredPoint: ScoredPoint, Percentage: Percentage},Status: true})
+            
+              const result = await this.create({'Student': body.Student, Mark: {ScoredPoint: ScoredPoint, Percentage: Percentage},Status: true});
+            
+            let response = '';
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'olasunkanmiusman1111@gmail.com',
+                  pass: process.env.PASS 
+                }
+              });
+            
+            
+              ejs.renderFile(__dirname +  "/../view/report.ejs", {Url: body.Path}, async (err,data) => {
+                if(err){
+                    console.log(err);  
+                    response += "Error with sending Email" 
+                }
+                else{
+                    const mailOptions = {
+                        from: 'AutoProctor@Socratease.com',
+                        to: `${body.Student.QuestionPath}@gmail.com`,
+                        subject: '[AutoProctor] Test Report',
+                        html:   data
+                      };
+                    
+                      transporter.sendMail(mailOptions, async (error, info) => {
+                        if (error) {
+                          console.log("error" + error);  
+                          response += "Error with sending Email"
+                        } else {
+                          console.log('Email sent: ' + info.response);
+                          response += "No Error with sending Email"
+                        }
+                      });
+                }
+              })
+
+
+            return result;
     }
 
     // Delete a Student

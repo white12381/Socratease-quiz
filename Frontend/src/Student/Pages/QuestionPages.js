@@ -55,7 +55,7 @@ const submitQuestion = async () => {
 });
 const data = await response.json();
 if(response.ok){ 
-    Question.QuestionMethods.setError(`You are successfully done with ${Question.Question.QuestionName} Test. We will get back to you on ${Question.Question.QuestionPath}@gmail.com`);
+    Question.QuestionMethods.setError(`You are successfully done with ${Question.Question.QuestionName} Test. We will get back to you on ${Question.Student.Email}`);
     localStorage.removeItem("showTest");
     localStorage.removeItem("Testurl");
 }
@@ -64,6 +64,7 @@ if(response.ok){
 
 
  const fetchQuestion = async () => { 
+
     const response = await fetch(`${Question.url}/api/question/${path}/name/${name}?index=${Question.serialNumber}`);
    const data = await response.json();
     if(!response.ok){
@@ -87,14 +88,15 @@ if(response.ok){
  
 
  const fetchAnswerQuestion = async () => { 
-    const response = await fetch(`${Question.url}/students/${path}/name/${name}?index=${Question.serialNumber}`);
+    const paths = Question.Student.Email;
+    const response = await fetch(`${Question.url}/students/${path}/name/${name}/${paths}?index=${Question.serialNumber}`);
    const data = await response.json();
     if(!response.ok){
        if((data.error === "You no longer have access to this Test")){
         Question.QuestionMethods.setError("You no longer have access to this Test")
        } 
        else{
-        fetchQuestion();
+        fetchQuestion(); 
         Question.QuestionMethods.setError(undefined)
        }
    }
@@ -120,7 +122,7 @@ if(response.ok){
 
 
 const postQuestion = async () => {
-const response = await fetch(`http://127.0.0.1:4000/students/addstudentquestion`,{
+const response = await fetch(`${Question.url}/students/addstudentquestion`,{
     method: 'POST',
     body: JSON.stringify(Question.body),
     headers: {
@@ -135,17 +137,19 @@ const time = new Date();
 
 
 useEffect( () => {
+    const paths = Question.Student.Email;
     const fetchLastAnswerQuestion = async () => { 
-        const response = await fetch(`${Question.url}/students/last/${path}/name/${name}`);
+        const response = await fetch(`${Question.url}/students/last/${paths}/name/${name}/${path}`);
        const data = await response.json();
         if(!response.ok){
            if((data.error === "You no longer have access to this Test")){
             Question.QuestionMethods.setError("You no longer have access to this Test")
            } 
            else{
-            fetchAnswerQuestion();
             Question.QuestionMethods.setError(undefined)
             console.log("back to index 1");
+            console.log("error" + data.error);
+            fetchAnswerQuestion();
            }
        }
        else{

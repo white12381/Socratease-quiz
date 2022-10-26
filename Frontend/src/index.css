@@ -75,8 +75,33 @@ padding: 5px;
   background-color:#04243c;
   color: white; 
 }
+ 
 #NavRow6{
   margin-top: -300px;
+}
+
+#studentsreport{
+  border-color: #04243c;
+  text-decoration: none;
+}
+
+#studentsreport:hover{
+  background-color:  #d7e8f5;
+}
+
+
+#studentEmail{
+  color:#04243c;
+  font: bolder;
+}
+
+#groupReport{
+  background-color: #5dbd84;
+  width: 100%;
+  height: 150px;
+}
+#studentName{
+  margin-top: 1000px;
 }
 
 #innerLogo{

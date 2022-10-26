@@ -54,28 +54,43 @@ try{
 const GetAQuestionByPathAndName = async (req,res) => {
     const path = decodeURI(req.params.path).toString();
     const name = req.params.name.toString();
+    const questionpath = req.params.questionpath;
 
 const index = req.query.index || 0;
     try{
-        const response = await StudentModel.GetAQuestionByPathAndName(path,name,index);
+        const response = await StudentModel.GetAQuestionByPathAndName(path,name,questionpath,index);
         res.status(200).json(response);
         }catch(err){
             res.status(400).json({error: err.message});
+            console.log(err.message);
         }
 }
 
-// Get Questions by Name
+// Get last Question by Name
 const GetLastQuestionByPathAndName = async (req,res) => {
     const path = decodeURI(req.params.path).toString();
     const name = req.params.name.toString();
+    const questionpath = req.params.questionpath;
  
     try{
-        const response = await StudentModel.GetLastQuestionByPathAndName(path,name);
+        const response = await StudentModel.GetLastQuestionByPathAndName(path,name,questionpath);
+        res.status(200).json(response);
+        }catch(err){
+            res.status(400).json({error: err.message});
+            console.log("Last question error " + err.message);
+        }
+}
+
+const GetQuestionsByPathAndStatus = async (req,res) => {
+    const path = decodeURI(req.params.path).toString(); 
+
+    try{
+        const response = await StudentModel.GetQuestionsByPathAndStatus(path);
         res.status(200).json(response);
         }catch(err){
             res.status(400).json({error: err.message});
         }
-}
+    }
 
 
 
@@ -103,4 +118,4 @@ try{
 
 
 
-module.exports = {GetLastQuestionByPathAndName,PostTime,GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}
+module.exports = {GetQuestionsByPathAndStatus,GetLastQuestionByPathAndName,PostTime,GetAQuestionByPathAndName,GetAllStudents, DeleteQuestionByEmail, GetStudentByEmail, PostAStudent, SubmitTest,DeleteAQuestion}

@@ -30,7 +30,8 @@ else {
 
 var QuestionName = Question.QuestionValues.Path + "/" + Question.QuestionValues.QuestionName;
 var Path =  window.location.host  + "/student/Question";
-const body = {QuestionName, Path};
+const email = `${Question.QuestionValues.Path}@gmail.com`
+const body = {QuestionName, Path,email};
 
 const SaveBtn = async () => { 
     const toastId = 2;
@@ -87,7 +88,7 @@ else{
             hideProgressBar: true
         });
         localStorage.removeItem("timer");
-        // Question.setAddQuestion([])
+        Question.setAddQuestion([])
     }
     else{ 
         console.log(response.error);
