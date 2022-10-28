@@ -25,9 +25,9 @@ function MyVerticallyCenteredModal(props) {
     } 
 
     const setTime = () => {
-      const seconds = document.getElementById("hours").value;
+      const seconds = document.getElementById("seconds").value;
       const minutes = (document.getElementById("minutes").value) * 60;
-      const hours = (document.getElementById("seconds").value) * (60 * 60);
+      const hours = (document.getElementById("hours").value) * (60 * 60);
       localStorage.setItem("timer",  Number((hours + minutes + seconds)));
     }
 

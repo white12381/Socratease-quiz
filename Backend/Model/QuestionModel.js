@@ -108,10 +108,7 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         if(!body.QuestionBody){
             throw Error("Question Body is required")
         } 
-        const User = await this.findOne({Path:body.Path, QuestionName:body.QuestionName});
-        if(User){
-            throw Error("Question Name already exist. Please change question name");
-        }        
+                 
        
        // Validate Question Answer Options
        if(body.QuestionAnswers === undefined){
