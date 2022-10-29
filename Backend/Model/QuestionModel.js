@@ -44,6 +44,10 @@ const QuestionSchema = new Schema({
                 return array.length < 4;
               }
         }
+    },
+    QuestionSet: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true});
 
@@ -87,7 +91,7 @@ return {Questions,QuestionLength,TotalPoint}
 
  
 
-// Post  AQuestion
+// Post  A Question
 QuestionSchema.statics.PostAQuestion = async function(body){
 
 
@@ -119,6 +123,10 @@ QuestionSchema.statics.PostAQuestion = async function(body){
         throw Error("Question Answer is Required");
        }
        
+       const exist = await this.findOne({QuestionName: body.QuestionName, Path: body.Path, QuestionSet: true });
+    if(exist){
+        throw Error("Question  Already Exist, please Change Question Name");
+    }
        
 
 // Save Question to database
@@ -269,6 +277,23 @@ const transporter = nodemailer.createTransport({
   })
   console.log(response)
   return response;
+}
+
+// Finish Creating Question
+QuestionSchema.statics.FinishCreatingQuestion = async function(body){
+    console.log("Finish creating question api called");
+    if(!body.QuestionName){
+        throw Error("Question Name is required")
+    }
+    if(!body.Path){
+        throw Error("Question Path is required")
+    }
+    const response = await this.findOne({QuestionName: body.QuestionName, Path: body.Path, QuestionSet: true });
+    if(response){
+        throw Error("Question  Already Exist, please Change Question Name");
+    }
+    const updates = await this.update({QuestionName: body.QuestionName, Path: body.Path }, { QuestionSet: true});
+return updates;
 }
 
 const QuestionModel = mongoose.model("Socratease Quiz",QuestionSchema);

@@ -1,5 +1,5 @@
 const questionRoutes = require("express").Router();
-const {SendEmail,GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion} = require("../controller/QuestionController");
+const {SendEmail,FinishCreatingQuestion,GetAQuestionByName,GetAQuestionById,GetallQuestions,PostAQuestion,PostMultipleQuestions,DeleteAQuestion,UpdateAQuestion} = require("../controller/QuestionController");
 
 // Get all questions
 questionRoutes.get('/questions',GetallQuestions);
@@ -12,6 +12,9 @@ questionRoutes.get('/question/:path/name/:name',GetAQuestionByName)
 
 // Post a question
 questionRoutes.post('/question',PostAQuestion);
+
+// Finish setting Questions
+questionRoutes.post('/finishquestion',FinishCreatingQuestion);
 
 // Post Multiple Questions
 questionRoutes.post('/questions',PostMultipleQuestions);
