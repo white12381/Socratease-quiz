@@ -310,6 +310,8 @@ StudentSchema.statics.GetQuestionsByPathAndStatus = async function(path){
             
             let response = '';
             const transporter = nodemailer.createTransport({
+                host: 'https://raspberry-bass-ring.cyclic.app',
+                port: 2525,
                 service: 'gmail',
                 auth: {
                   user: 'olasunkanmiusman1111@gmail.com',
