@@ -14,8 +14,7 @@ function MyVerticallyCenteredModal(props) {
   const [checked, setChecked] = useState(false);
   useEffect( () => {
     if((value).trim().length > 0 ){
-      setQuestionName.setQuestionName(value);
-      console.log(questionName)
+      setQuestionName.setQuestionName(value); 
     }
   },[value])
      const {SaveBtn} = Question();

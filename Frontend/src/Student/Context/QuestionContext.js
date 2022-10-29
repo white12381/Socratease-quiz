@@ -20,7 +20,7 @@ export const QuestionProvider = ({children}) => {
     const [QuestionTime, setQuestionTime] = useState(0);
     const [showTest, setShowTest] = useState(false);
     const [error, setError] = useState(undefined); 
-    const url = (`http://127.0.0.1:4000`); 
+    const url = (`https://raspberry-bass-ring.cyclic.app`); 
      
 
         const setAnswerOptions = (value) => {
