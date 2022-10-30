@@ -88,7 +88,18 @@ else{
             hideProgressBar: true
         });
         localStorage.removeItem("timer");
-        Question.setAddQuestion([])
+       
+
+        const finishquestion = await fetch(`${Question.url}/api/finishquestion`,{
+            method: 'POST', 
+            body: JSON.stringify(QuestionAdd[0]),
+            headers: {'Content-Type': 'application/json'}
+    });
+    console.log(`Before Finish Question ${QuestionAdd[0]}`)
+    const datas = await finishquestion.json();
+    if(finishquestion.ok){
+        Question.setAddQuestion([]);
+    }
     }
     else{ 
         console.log(response.error);

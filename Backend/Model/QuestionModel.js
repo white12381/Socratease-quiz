@@ -294,7 +294,7 @@ QuestionSchema.statics.FinishCreatingQuestion = async function(body){
     if(response){
         throw Error("Question  Already Exist, please Change Question Name");
     }
-    const updates = await this.update({QuestionName: body.QuestionName, Path: body.Path }, { QuestionSet: true});
+    const updates = await this.updateMany({QuestionName: body.QuestionName, Path: body.Path }, { QuestionSet: true});
 return updates;
 }
 

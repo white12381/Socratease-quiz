@@ -34,7 +34,7 @@ useEffect( () => {
 })  
   return (<div>
   <NavBar/>
-  <div className="text-center" id="homePage" style={{minHeight: '100vh'}}>
+  <div className="text-center" id="homePage" style={{minHeight: '150vh'}}>
   <h1 className="fw-bolder text-center fs-1">
     Fully Automated Exam Proctoring
   </h1>
@@ -54,7 +54,7 @@ useEffect( () => {
   <div className="col-12 col-md-4 text-md-start">
 <img src={students2}/>
 </div>
-<div className="col-12 col-md-4 text-md-start me-5 mt-5 border border-light border-5" style={{ backgroundColor: "#04243c"}}>
+<div className="col-12 col-md-4 text-md-start me-2 ms-2 mt-5 border border-light border-5" style={{ backgroundColor: "#04243c"}} id="ProctorTest">
 <div id="innerHeading"  className="text-light fw-bolder fs-3 text-center ps-5">
   Create A proctored Test within Minutes
 </div>
@@ -68,7 +68,7 @@ useEffect( () => {
 </ul>
   </div>
 <div className="col-12 col-md-3  mt-5">
-<img src={students1} className="col-12 col-md-4" style={{width: '50%', height: 'auto'}} />
+<img src={students1} className="col-12 col-md-4" style={{width: '80%', height: 'auto'}} />
 </div>
 </div>
   </div>

@@ -10,13 +10,12 @@ const [QuestionPoint, setQuestionPoint] = useState('');
 const [QuestionBody,setQuestionBody] = useState(undefined);
 const [QuestionAnswers, setQuestionAnswers] = useState([]);
 const [QuestionName, setQuestionName] = useState('');
-const [Path, setPath] = useState(path);
-// var QuestionAdd = []; 
+const [Path, setPath] = useState(path); 
 const [option1, setoption1] = useState(undefined);
 const [option2,setoption2] = useState(undefined);
 const [option3, setoption3] = useState(undefined);
 const [option4, setoption4] = useState(undefined);
-const url = (`https://raspberry-bass-ring.cyclic.app`);
+const url = (`http://127.0.0.1:4000`);
 
 var QuestionAnswerOptions = [];
 

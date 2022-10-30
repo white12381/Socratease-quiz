@@ -118,7 +118,7 @@ padding: 5px;
 
 #innerHeading{
   background-color: #5dbd84;
-   width: 106%;
+   width: 108%;
 margin-left: -12px;
 
 }
@@ -186,7 +186,6 @@ margin-left: -12px;
 }
  
 
-
 @media screen and (max-width: 1024px) {
   #logo{
     margin-left: 80px;
@@ -194,6 +193,8 @@ margin-left: -12px;
     height: auto;
     margin-top: -40px;
   }
+
+
 
   #logoHome{
     margin-right: 110px;
@@ -223,6 +224,7 @@ margin-top: 10px;
 }
 
 
+
 @media screen and (min-width: 1024px){
   #option{ 
     width: 100%;
@@ -231,4 +233,92 @@ margin-top: 10px;
   body{
     overflow-x: hidden;
   }
+  #innerHeading{
+    background-color: #5dbd84;
+     width: 107.5%;
+  margin-left: -12px;
+  
+  }
 }
+
+@media screen and (max-width: 550px){
+  #ProctorTest{
+    width: 85%;
+  }
+  
+#innerHeading{
+  background-color: #5dbd84;
+   width: 106%;
+margin-left: -12px;
+
+}
+
+}
+
+@media screen and (min-width: 1280px){
+  #innerHeading{
+    background-color: #5dbd84;
+     width: 106%;
+  margin-left: -12px;
+  
+  }
+}
+
+@media screen and (min-width: 280px){
+  #innerHeading{
+    background-color: #5dbd84;
+     width: 111%;
+  margin-left: -12px;
+  
+  }
+}
+@media screen and (max-width: 417px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 107.8%;
+  margin-left: -12px;
+  
+  }
+}
+
+@media screen and (width: 540px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 106%;
+  margin-left: -12px;
+  
+  }
+}
+@media screen and (width: 280px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 110.8%;
+  margin-left: -12px;
+  
+  }
+}
+@media screen and (min-width: 1024px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 106%;
+  margin-left: -12px;
+  }
+}
+
+@media screen and (width: 912px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 109%;
+  margin-left: -12px;
+  
+  }
+}
+@media screen and (width: 1024px){
+  #innerHeading{
+    background-color:  #5dbd84;
+     width: 108%;
+  margin-left: -12px;
+  
+  }
+}
+ 

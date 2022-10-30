@@ -20,6 +20,11 @@ mongoose.connect(process.env.MONGO_URI, () => {
     app.listen(process.env.PORT, () => console.log(`app running on port ${process.env.PORT}`));
 });
 
+app.use( (req,res,next) => {
+    console.log(`Request Path is ${req.path}`)
+    console.log(`Request type is ${req.method}`);
+    next();
+})
 
 app.get('/',(req,res) => {
     res.status(200).json({message: "Home Response"});
