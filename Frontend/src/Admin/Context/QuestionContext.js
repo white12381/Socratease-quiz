@@ -15,7 +15,8 @@ const [option1, setoption1] = useState(undefined);
 const [option2,setoption2] = useState(undefined);
 const [option3, setoption3] = useState(undefined);
 const [option4, setoption4] = useState(undefined);
-const url = (`http://127.0.0.1:4000`);
+const [questionsend, setQuestionsend] = useState(false);
+const url = (`https://socratease-backend.onrender.com`);
 
 var QuestionAnswerOptions = [];
 
@@ -50,7 +51,8 @@ const QuestionValues = {
     QuestionName,Path
 }
 const QuestionMethods = {
-    setQuestionType,setQuestionPoint, setQuestionBody, setQuestionAnswers,setQuestionName
+    setQuestionType,setQuestionPoint, setQuestionBody, setQuestionAnswers,setQuestionName,
+    setQuestionsend
 }
 
 var setQuestionAnswerOption = {
@@ -59,7 +61,7 @@ var setQuestionAnswerOption = {
 var QuestionAnswerOption = {
     option1, option2, option3, option4
 }
-    return <QuestionContext.Provider value={{url,AddQuestion,setAddQuestion,addQuestion,QuestionValues,QuestionMethods,setQuestionAnswerOption,QuestionAnswerOption}}>
+    return <QuestionContext.Provider value={{url, questionsend,AddQuestion,setAddQuestion,addQuestion,QuestionValues,QuestionMethods,setQuestionAnswerOption,QuestionAnswerOption}}>
         {children}
     </QuestionContext.Provider>
 }

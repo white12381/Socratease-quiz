@@ -21,6 +21,7 @@ if(response.ok){
   Question.QuestionMethods.setError(`Your time is Up and your responses has been submitted. We will get back to you on ${Question.Student.Email}`);
   localStorage.removeItem("showTest");
   localStorage.removeItem("Testurl");
+  Question.QuestionMethods.setShowTest(false);
 }
 }
 

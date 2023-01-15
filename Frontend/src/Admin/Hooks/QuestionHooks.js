@@ -29,7 +29,7 @@ else {
 } 
 
 var QuestionName = Question.QuestionValues.Path + "/" + Question.QuestionValues.QuestionName;
-var Path =  window.location.host  + "/student/Question";
+var Path = "https://" + window.location.host  + "/student/Question";
 const email = `${Question.QuestionValues.Path}@gmail.com`
 const body = {QuestionName, Path,email};
 
@@ -38,6 +38,7 @@ const SaveBtn = async () => {
     const temp = [...QuestionAdd];
     var success = true;
     if(QuestionAdd.length > 0){
+        Question.QuestionMethods.setQuestionsend(true);
         for(let i = 0; i < QuestionAdd.length; i++){
             QuestionAdd[i].QuestionName = Question.QuestionValues.QuestionName;
             QuestionAdd[i].QuestionTime = localStorage.getItem("timer");
@@ -127,6 +128,8 @@ else {
         hideProgressBar: true
     });
 }
+
+Question.QuestionMethods.setQuestionsend(false);
 
 }
 

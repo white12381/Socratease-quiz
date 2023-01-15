@@ -20,7 +20,7 @@ export const QuestionProvider = ({children}) => {
     const [QuestionTime, setQuestionTime] = useState(0);
     const [showTest, setShowTest] = useState(false);
     const [error, setError] = useState(undefined); 
-    const url = (`https://raspberry-bass-ring.cyclic.app`); 
+    const url = (`https://socratease-backend.onrender.com`);  
      
 
         const setAnswerOptions = (value) => {
@@ -41,7 +41,7 @@ export const QuestionProvider = ({children}) => {
             QuestionType, QuestionName,QuestionPoint,QuestionBody,
             QuestionPath, QuestionAnswerOptions,QuestionAnswers
         }
-        var Path =  window.location.host  + "/admin/report/" + QuestionPath;
+        var Path = "https://" + window.location.host  + "/admin/report/" + QuestionPath;
         
         const body = {Question,Student,QuestionSelectedAnswer, QuestionTime,Path};
 

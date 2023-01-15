@@ -7,15 +7,7 @@ const QuestionSelectedAnswer = ({placeinside},{onchange}) => {
     const [value, setValue] = useState(undefined)
     const Question = useContext(QuestionContext);  
   
-    
-      // useEffect( () => {
-      //   if(Question.QuestionSelectedAnswer.length > 1){
-      //     setValue(Question.QuestionSelectedAnswer[0]);
-      //   }
-      //   else {
-      //     setValue(undefined);
-      //   }
-      // })
+     
 
     const toolbars = [ 
       ['bold', 'italic', 'underline','strike', 'clean'],

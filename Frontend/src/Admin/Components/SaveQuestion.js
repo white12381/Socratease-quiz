@@ -82,7 +82,7 @@ function SaveQuestion() {
 
   return (
     <> 
-      <button  className="btn fs-6" id="saveQuestion" onClick={() => setModalShow(true)}> 
+      <button disabled={useContext(QuestionContext).questionsend} className="btn fs-6" id="saveQuestion" onClick={() => setModalShow(true)}> 
 <FontAwesomeIcon icon={faCloudUpload} className="me-2" />
 Save Question</button>
 

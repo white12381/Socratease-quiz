@@ -5,21 +5,18 @@ import { useParams } from 'react-router'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom' 
 import MyTimer from '../Hooks/Timerhooks' 
-import { useLocation } from 'react-router'
-import GoogleLoginAuth from '../../Components/GoogleLoginAuth'
+import { useLocation } from 'react-router' 
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 const QuestionPage = (props) => {
-    const {signIn} = GoogleLoginAuth();
-    var value;  
+     var value;  
     const location = useLocation();
     const [selectedvalue, setSelectedValue] = useState('');
-    const [error, setError] = useState(undefined);
-    const [clock, setClock] = useState(0);
+    const [loader, setLoader] = useState(true);
+    const [loaderText, setLoaderText] = useState('');
 const navigate = useNavigate();
-const Question = useContext(QuestionContext);
-var isQuestionAnswer = [];
+const Question = useContext(QuestionContext); 
 const {name,path} = useParams();
 
 const authorized = ((localStorage.getItem("name") && localStorage.getItem("email")) != null);
@@ -45,6 +42,8 @@ const setAnswerInputvalue = (val) => {
  
 
 const submitQuestion = async () => { 
+    setLoaderText("Submitting Answers");
+    setLoader(true);
     await postQuestion();
     const response = await fetch(`${Question.url}/students/submitquestion`,{
     method: 'POST',
@@ -57,13 +56,17 @@ const data = await response.json();
 if(response.ok){ 
     Question.QuestionMethods.setError(`You are successfully done with ${Question.Question.QuestionName} Test. We will get back to you on ${Question.Student.Email}`);
     localStorage.removeItem("showTest");
-    localStorage.removeItem("Testurl");
+    localStorage.removeItem("Testurl"); 
+    Question.QuestionMethods.setShowTest(false);
+    setLoader(false);
 }
  
 }
 
 
  const fetchQuestion = async () => { 
+    setLoaderText("Loading Question");
+    setLoader(true);
 
     const response = await fetch(`${Question.url}/api/question/${path}/name/${name}?index=${Question.serialNumber}`);
    const data = await response.json();
@@ -83,17 +86,22 @@ if(response.ok){
    Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
    Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
    Question.QuestionMethods.setQuestionPath(path); 
+   setLoader(false);
    }
     }
  
 
  const fetchAnswerQuestion = async () => { 
+    setLoaderText("Loading Question");
+    setLoader(true);
     const paths = Question.Student.Email;
     const response = await fetch(`${Question.url}/students/${path}/name/${name}/${paths}?index=${Question.serialNumber}`);
    const data = await response.json();
     if(!response.ok){
        if((data.error === "You no longer have access to this Test")){
-        Question.QuestionMethods.setError("You no longer have access to this Test")
+        Question.QuestionMethods.setError("You no longer have access to this Test");
+        console.log("you no longer have access to this test");
+        setLoader(false);
        } 
        else{
         fetchQuestion(); 
@@ -112,16 +120,18 @@ if(response.ok){
    Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
    Question.QuestionMethods.setQuestionPath(path);
    Question.QuestionMethods.setSelectedAnswer(data.Questions[0].QuestionSelectedAnswer); 
-   Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
+   Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime);
+   setLoader(false);
    if(data.Questions[0].QuestionSelectedAnswer.length > 0){
     setSelectedValue(setAnswerInputvalue(data.Questions[0].QuestionSelectedAnswer[0]));
    }
    }
+
     }
 
 
 
-const postQuestion = async () => {
+const postQuestion = async () => { 
 const response = await fetch(`${Question.url}/students/addstudentquestion`,{
     method: 'POST',
     body: JSON.stringify(Question.body),
@@ -129,7 +139,7 @@ const response = await fetch(`${Question.url}/students/addstudentquestion`,{
         'Content-Type': 'application/json'
     }
 });
-const data = await response.json();
+const data = await response.json(); 
 }
 
  
@@ -137,13 +147,16 @@ const time = new Date();
 
 
 useEffect( () => {
+    setLoader(true);
+    setLoaderText("Loading Question");
     const paths = Question.Student.Email;
     const fetchLastAnswerQuestion = async () => { 
         const response = await fetch(`${Question.url}/students/last/${paths}/name/${name}/${path}`);
        const data = await response.json();
         if(!response.ok){
            if((data.error === "You no longer have access to this Test")){
-            Question.QuestionMethods.setError("You no longer have access to this Test")
+            Question.QuestionMethods.setError("You no longer have access to this Test");
+            setLoader(false);
            } 
            else{
             Question.QuestionMethods.setError(undefined)
@@ -153,7 +166,6 @@ useEffect( () => {
            }
        }
        else{
-        console.log("last Question") 
         Question.QuestionMethods.setQuestionLength(data.Questions[0].Student.questionLength);
         Question.QuestionMethods.setTotalPoint(data.Questions[0].Student.TotalPoint);
        Question.QuestionMethods.setQuestionName(data.Questions[0].Question.QuestionName);
@@ -166,25 +178,26 @@ useEffect( () => {
        Question.QuestionMethods.setQuestionPath(path);
        Question.QuestionMethods.setQuestionNumber(data.QuestionLength)
        Question.QuestionMethods.setSelectedAnswer(data.Questions[0].QuestionSelectedAnswer); 
-       Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime)
+       Question.QuestionMethods.setQuestionTime(data.Questions[0].QuestionTime);
+       setLoader(true);
        if(data.Questions[0].QuestionSelectedAnswer.length > 0){
         setSelectedValue(setAnswerInputvalue(data.Questions[0].QuestionSelectedAnswer[0]));
        }
        }
         }
-        fetchLastAnswerQuestion();
+        fetchLastAnswerQuestion(); 
 },[])
  
 
 
 const HandleNext = () => {
-    
      if(Question.serialNumber < (Question.questionLength - 1)){
         Question.QuestionMethods.setSerialNumber(Question.serialNumber++);
         Question.QuestionMethods.setQuestionNumber(++Question.questionNumber); 
         postQuestion();
         fetchAnswerQuestion();
-     } 
+     }
+
 }
 
 const HandlePrevious = () => {
@@ -222,6 +235,8 @@ const HandleInputSelectAnswer = (e) => {
 }
  
     return <> 
+    
+
     <div style={{display: "none"}}>
     {  time.setSeconds(  time.getSeconds() + Question.body.QuestionTime) }
     </div>
@@ -231,12 +246,20 @@ const HandleInputSelectAnswer = (e) => {
     <div  className="border border-5 p-3" id="offcanvas-header">
 <img src={AutoProctorlogo} alt="Logo"  width="25%" height="auto" className="d-inline-block"/>
  </div> 
+
+ <div>
+    {
+           loader ? 
+           <div className="d-flex align-items-center align-self-center m-5 display-1">
+           <strong>{loaderText}...</strong>
+           <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+         </div> : <div>
  <div className="row border border-5  bg-light p-3 mx-3 my-2 ps-5">
- <div className='col-6'>
+ <div className='col-12 col-md-6'>
     <h5>Question Name: {Question.Question.QuestionName}</h5>
     <h5>Serial Number: {Question.questionNumber} of {Question.questionLength}</h5>
     </div>
-    <div className="col-3">
+    <div className="col-12 col-md-6 text-center text-lg-start">
         {
             (Question.body.QuestionTime > 0) ?
     <MyTimer expiryTimestamp={time} />  : null
@@ -265,6 +288,9 @@ const HandleInputSelectAnswer = (e) => {
            : <button onClick={submitQuestion} className='btn btn-outline-dark me-2 border'>Submit</button>
     }
                 </div>
+                </div>
+}
+                </div>
 
     </div> :
     <div  id="QuestionPage" className='p-2'>
@@ -274,7 +300,9 @@ const HandleInputSelectAnswer = (e) => {
   <p className='text-center fw-bolder fs-3 mt-5'>{Question.error}</p> 
   <Link className='btn btn-dark' id="BacktoHome" to='/' >Back to HomePage</Link>
  </div> 
+
 }
     </>
+
 }
 export default QuestionPage

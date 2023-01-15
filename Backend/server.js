@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const questionRoutes = require("./Routes/QuestionRoutes");
-const StudentRoutes = require("./Routes/StudentRoutes")
+const StudentRoutes = require("./Routes/StudentRoutes"); 
 const cors = require("cors");
-const nodemailer = require("nodemailer");
-const ejs = require("ejs");
 require("dotenv").config();
 
 // Set veiw Engine
@@ -16,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 // Connect to Mongodb
 
-mongoose.connect(process.env.MONGO_URI, () => {
+mongoose.connect(process.env.MONGO_URI, async () => {  
     app.listen(process.env.PORT, () => console.log(`app running on port ${process.env.PORT}`));
 });
 

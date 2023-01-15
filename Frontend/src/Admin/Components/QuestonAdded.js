@@ -12,15 +12,15 @@ const QuestionAdd = ({questions}) => {
             <div id="QuestionForm" className="row" key={index}> 
              <div className="border ps-3 col-10 border-2 mb-5 text-start">
             <div className="row mb-3">
-            <div className="col-6">
+            <div className="col-7 col-md-5">
             <FontAwesomeIcon icon={faGripHorizontal} className="me-1"/>
                 Question {index + 1}
             </div>
-            <div className="col-2">
-                {question.QuestionType}
-            </div>
-            <div className="col-4">
+            <div className="col-5 col-md-3">
                 Points: {question.QuestionPoint}
+            </div>
+            <div className="col-6 col-md-4">
+                {question.QuestionType}
             </div>
             </div>
                 Question: <br/>
