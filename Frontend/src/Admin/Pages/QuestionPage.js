@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 const QuestionPage = () => {
   const {path} = useParams();
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
 const [reports, setReports] = useState({});
 const Question = useContext(QuestionContext);
 const QuestionUrl = Question.url;
@@ -19,6 +20,7 @@ useLayoutEffect( () => {
 })
   useEffect( () => {
     const fetchReport = async () => {
+      setLoader(true);
       const response = await fetch(`${QuestionUrl}/students/report/${path}`);
       const data = await response.json();
       if(!response.ok){
@@ -26,14 +28,23 @@ useLayoutEffect( () => {
       }
       else{
           setReports(data); 
+          setLoader(false);
       }
       
     }
     fetchReport();
   },[])
     return <> 
-    <h1>Student Report</h1>
-  { reports.QuestionName && reports.QuestionName.map( (questionname,index) => (
+    <h1>Student Report</h1>  
+    {
+   loader ?  <div>
+<div className="m-5" Style="width: 80%; height: 20rem;" >
+ <div className="spinner-border text-dark my-5" role="status" id="ResultStatus">
+  <span className="visually-hidden">Loading...</span>
+</div> 
+</div>
+</div>: <div>
+{ reports.QuestionName && reports.QuestionName.map( (questionname,index) => (
     <div key={index}>
         <h3 className="mt-5" >{questionname}</h3>
 <div>
@@ -69,6 +80,8 @@ useLayoutEffect( () => {
     </div>
   ))
     
+}
+</div>
 }
     </>
 }

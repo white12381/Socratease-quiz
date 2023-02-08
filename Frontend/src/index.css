@@ -321,4 +321,7 @@ margin-left: -12px;
   
   }
 }
- 
+ #ResultStatus{
+  width: 10rem; 
+  height: 10rem;
+ }
