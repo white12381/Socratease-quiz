@@ -20,7 +20,8 @@ export const QuestionProvider = ({children}) => {
     const [QuestionTime, setQuestionTime] = useState(0);
     const [showTest, setShowTest] = useState(false);
     const [error, setError] = useState(undefined); 
-    const url = (`https://socratease-backend.onrender.com`);  
+    const url = (`https://backend-2g9fdq4zp-white12381s-projects.vercel.app`); 
+    // const url = `http://localhost:4000` 
      
 
         const setAnswerOptions = (value) => {

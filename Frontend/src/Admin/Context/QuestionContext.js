@@ -16,7 +16,8 @@ const [option2,setoption2] = useState(undefined);
 const [option3, setoption3] = useState(undefined);
 const [option4, setoption4] = useState(undefined);
 const [questionsend, setQuestionsend] = useState(false);
-const url = (`https://socratease-backend.onrender.com`);
+const url = (`https://backend-2g9fdq4zp-white12381s-projects.vercel.app`);
+// const url = `http://localhost:4000`
 
 var QuestionAnswerOptions = [];
 
